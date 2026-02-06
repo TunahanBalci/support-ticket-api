@@ -1,0 +1,51 @@
+{
+  "name": "support-ticket-api",
+  "type": "module",
+  "version": "2.0.0",
+  "description": "Support Ticket API",
+  "author": "Tunahan B. <dev.tunahanbalci@gmail.com> (https://tunahanbalci.dev)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/w3cj/support-ticket-api.git"
+  },
+  "keywords": [],
+  "main": "src/index.ts",
+  "scripts": {
+    "start": "node --env-file=.env src/index.js",
+    "dev": "node --watch --env-file=.env src/index.js",
+    "lint": "eslint --fix src",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.3.0",
+    "@prisma/client": "^7.3.0",
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.3",
+    "morgan": "^1.10.1",
+    "pg": "^8.18.0",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^6.2.0",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/morgan": "^1.9.10",
+    "@types/node": "^25.2.0",
+    "@types/pg": "^8.16.0",
+    "eslint-plugin-format": "^1.0.2",
+    "prisma": "^7.3.0",
+    "supertest": "^7.1.4",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.6"
+  },
+  "prisma": {
+    "schema": "src/data/schema.prisma"
+  }
+}

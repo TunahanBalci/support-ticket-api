@@ -1,0 +1,65 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Users {
+  id             String  @id @default(uuid())
+  email          String  @unique @db.VarChar(127)
+  password       String
+  refreshTokens  RefreshTokens[]
+  tickets        Tickets[]
+ 
+  @@index([email])
+}
+
+model Tickets {
+  id           String   @id @default(uuid())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  title        String   @db.VarChar(100)
+  description  String   @db.VarChar(5000)
+  status       Status   @default(OPEN)
+  userId       String   // FK
+  user         Users    @relation(fields: [userId], references: [id])
+  messages     Messages[]
+
+  @@index ([userId])
+}
+
+model Messages {
+  id          String     @id @default(uuid())
+  createdAt   DateTime   @default(now())
+  content     String     @db.VarChar(1000)
+  senderType  SenderType
+  ticketId    String     // FK
+  ticket      Tickets    @relation(fields: [ticketId], references: [id])
+
+  @@index ([ticketId])
+}
+
+model RefreshTokens {
+  id           String   @id @unique @default(uuid())
+  hashedToken  String   @unique
+  userId       String   // FK  
+  User         Users    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  revoked      Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  expireAt     DateTime
+}
+
+enum Status {
+  OPEN
+  PENDING
+  RESOLVED
+}
+
+enum SenderType {
+  USER
+  SUPPORT_AGENT
+}
