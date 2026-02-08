@@ -4,15 +4,14 @@ import { env } from "../utils/env.utils";
 import { buildPagination } from "../utils/pagination.utils";
 import { prisma } from "../utils/prisma.utils";
 
-/*
-PARAMS
-@param _userId - string
-@param _status? - "OPEN" | "PENDING" | "RESOLVED"
-@param pagination? - { page: number; limit: number, orderBy: "asc" | "desc" }
-
-Finds all tickets for a user, optionally filtered by status, and paginated.
-If no pagination is provided, defaults to page 1 and limit 10.
-*/
+/**
+ * @param _userId - string
+ * @param _status? - "OPEN" | "PENDING" | "RESOLVED"
+ * @param pagination? - { page: number; limit: number, orderBy: "asc" | "desc" }
+ *
+ * Finds all tickets for a user, optionally filtered by status, and paginated.
+ * If no pagination is provided, defaults to page 1 and limit 10.
+ */
 async function findAllTicketsByUser(_userId: string, _status?: string, pagination?: { page: number; limit: number; orderBy?: "asc" | "desc"; orderType?: "updatedAt" | "createdAt" }) {
   const { page, limit, orderBy, orderType } = await buildPagination(pagination || {});
 
@@ -58,16 +57,15 @@ async function findAllTicketsByUser(_userId: string, _status?: string, paginatio
   return { tickets, page, limit, count };
 }
 
-/*
-PARAMS
-@param orderBy - "asc" or "desc"
-@param orderType - "updatedAt" or "createdAt"
-@param pagination? - { page: number; limit: number }
-
-Finds all tickets sorted by columns updatedAt or createdAt in ascending or descending order.
-If no order is provided, defaults to sorting by createdAt in descending order (newest first).
-Uses pagination with default values of page 1 and limit 10 if no pagination is provided.
-*/
+/**
+ * @param orderBy - "asc" or "desc"
+ * @param orderType - "updatedAt" or "createdAt"
+ * @param pagination? - { page: number; limit: number }
+ *
+ * Finds all tickets sorted by columns updatedAt or createdAt in ascending or descending order.
+ * If no order is provided, defaults to sorting by createdAt in descending order (newest first).
+ * Uses pagination with default values of page 1 and limit 10 if no pagination is provided
+ */
 async function findAllTicketsSorted(status?: string, pagination?: { page: number; limit: number; orderBy?: "asc" | "desc"; orderType?: "updatedAt" | "createdAt" }) {
   const { page, limit, orderBy, orderType } = await buildPagination(pagination || {});
 
@@ -115,14 +113,13 @@ async function findAllTicketsSorted(status?: string, pagination?: { page: number
   return { tickets, page, limit, count };
 }
 
-/*
-PARAMS
-@param _userId - string
-@param _title - string
-@param _description - string
-
-Creates a new ticket for the user with the given userId.
-*/
+/** 
+ * @param _userId - string
+ * @param _title - string
+ * @param _description - string
+ *
+ * Creates a new ticket for the user with the given userId.
+ */
 async function createTicket(_userId: string, _title: string, _description: string) {
   return prisma.tickets.create({
     data: {
@@ -133,12 +130,11 @@ async function createTicket(_userId: string, _title: string, _description: strin
   });
 }
 
-/*
-PARAMS
-@param _id - string
-
-Finds a ticket by its id.
-*/
+/**
+ * @param _id - string
+ *
+ * Finds a ticket by its id.
+ */
 async function findTicketById(_id: string) {
   return prisma.tickets.findFirst({
     where: {
@@ -147,13 +143,12 @@ async function findTicketById(_id: string) {
   });
 }
 
-/*
-PARAMS
-@param ticket - Tickets
-@param params - { title?: string; description?: string; status?: string }
-
-Updates a ticket with the given parameters.
-*/
+/**
+ * @param ticket - Tickets
+ * @param params - { title?: string; description?: string; status?: string }
+ *
+ * Updates a ticket with the given parameters.
+ */
 async function updateTicket(ticket: Tickets, params: { title?: string; description?: string; status?: string }) {
   return prisma.tickets.update({
     where: {
@@ -168,13 +163,12 @@ async function updateTicket(ticket: Tickets, params: { title?: string; descripti
   });
 }
 
-/*
-PARAMS
-@param ticket - Tickets
-@param params - { title?: string; description?: string; status?: string }
-
-Deletes a ticket by its id. Soft delete.
-*/
+/** 
+ * @param ticket - Tickets
+ * @param params - { title?: string; description?: string; status?: string }
+ *
+ * Deletes a ticket by its id. Soft delete.
+ */
 async function deleteTicket(_id: string) {
   return prisma.tickets.update({
     where: {

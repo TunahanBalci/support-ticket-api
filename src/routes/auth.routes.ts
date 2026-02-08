@@ -7,7 +7,15 @@ import { generateTokens } from "../utils/jwt.utils";
 
 const router = express.Router();
 
-// REGISTER - CREATE NEW USER AND RETURN TOKENS
+/**
+ * REGISTRATION 
+ * POST /api/auth/register
+ * 
+ * request body: { email: string, password: string }
+ *
+ * Creates a new user with the provided email and password.
+ * Returns access and refresh tokens upon successful registration.
+ */
 router.post("/register", validateEmail, validatePassword, async (req, res, next) => {
   try {
     const { email, password } = req.body;
@@ -37,7 +45,16 @@ router.post("/register", validateEmail, validatePassword, async (req, res, next)
   }
 });
 
-// LOGIN - AUTHENTICATE USER AND RETURN TOKENS
+
+/**
+ * LOGIN  
+ * POST /api/auth/login
+ * 
+ * request body: { email: string, password: string }
+ *
+ * Authenticates a user with the provided email and password.
+ * Returns access and refresh tokens upon successful login
+ */
 router.post("/login", async (req, res, next) => {
   try {
     const { email, password } = req.body;

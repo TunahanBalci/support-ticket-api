@@ -3,14 +3,24 @@ import express from "express";
 import { deleteTicket, findAllTicketsByUser, findAllTicketsSorted, findTicketById, updateTicket } from "../controllers/ticket.controller";
 import { isAuthenticated } from "../middlewares/auth.middlewares";
 import { validatePagination, validateUserId } from "../middlewares/validate.middlewares";
+import { generateEmbedding } from "../utils/embedding.utils";
 import { canAccessTicket, canViewAllTickets, canViewUserTickets } from "../utils/permissions.utils";
 import { prisma } from "../utils/prisma.utils";
 
 const router = express.Router();
 
-// GET ALL TICKETS BY USER ID
-// orderBy => asc or desc
-// orderType => updatedAt or createdAt
+/**
+ * LIST TICKETS BY USER ID
+ * GET /api/tickets/user/:userId?orderBy=asc&orderType=createdAt&page=1&limit=10
+ * 
+ * Lists all tickets for a specific user with sorting and pagination
+ * 
+ * orderBy can be "asc" or "desc"
+ * orderType can be "updatedAt" or "createdAt"
+ * page defaults to 1, limit defaults to 10
+ * 
+ * Accessible by USER and SUPPORT_AGENT roles, but users can only view their own tickets 
+ */
 router.get("/user/:userId", isAuthenticated, validateUserId, validatePagination, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { userId } = req.params;
@@ -43,9 +53,18 @@ router.get("/user/:userId", isAuthenticated, validateUserId, validatePagination,
   }
 });
 
-// GET ALL TICKETS WITH SORTING
-// orderBy => asc or desc
-// orderType => updatedAt or createdAt
+/**
+ * GET ALL TICKETS 
+ * GET /api/tickets/all?orderBy=asc&orderType=createdAt&page=1&limit=10
+ * 
+ * Lists all tickets with sorting and pagination
+ * 
+ * orderBy can be "asc" or "desc"
+ * orderType can be "updatedAt" or "createdAt"
+ * page defaults to 1, limit defaults to 10
+ * 
+ * Only accessible by SUPPORT_AGENT role
+ */
 router.get("/all/", isAuthenticated, validatePagination, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { orderBy, orderType, status } = req.query;
@@ -77,7 +96,14 @@ router.get("/all/", isAuthenticated, validatePagination, async (req: Request, re
   }
 });
 
-// GET TICKET BY ID
+/**
+ * FIND TICKET BY ID
+ * GET /api/tickets/:id
+ * 
+ * Finds a ticket by its ID
+ * 
+ * Only accessible by USER and SUPPORT_AGENT roles, but users can only view their own tickets
+ */
 router.get("/:id", isAuthenticated, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params;
@@ -105,7 +131,14 @@ router.get("/:id", isAuthenticated, async (req: Request, res: Response, next: Ne
   }
 });
 
-// CREATE TICKET
+/**
+ * CREATE TICKET
+ * POST /api/tickets/create
+ * 
+ * request body = { title: string, description: string, status?: string }
+ * 
+ * Creates a new ticket for the authenticated user
+ */
 router.post("/create", isAuthenticated, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { title, description, status } = req.body;
@@ -128,6 +161,18 @@ router.post("/create", isAuthenticated, async (req: Request, res: Response, next
         userId,
       },
     });
+
+    // generate embedding
+    const textForEmbedding = `Title: ${title}. Content: ${description}`;
+    const embedding = await generateEmbedding(textForEmbedding);
+
+    const vectorString = `[${embedding.join(",")}]`;
+    await prisma.$executeRaw`
+      UPDATE "Tickets" 
+      SET embedding = ${vectorString}::vector 
+      WHERE id = ${ticket.id}
+    `;
+
     res.status(201).json({ data: ticket, message: "Ticket created successfully" });
   }
   catch (err) {
@@ -136,7 +181,16 @@ router.post("/create", isAuthenticated, async (req: Request, res: Response, next
   }
 });
 
-// UPDATE TICKET
+/**
+ * UPDATE TICKET 
+ * PUT /api/tickets/update
+ * 
+ * request body = { id: string, title?: string, description?: string, status?: string }
+ * 
+ * Updates a specific ticket
+ * 
+ * Only accessible by USER and SUPPORT_AGENT roles, but users can only update their own tickets
+ */
 router.put("/update", isAuthenticated, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { id, title, description, status } = req.body;
@@ -164,7 +218,16 @@ router.put("/update", isAuthenticated, async (req: Request, res: Response, next:
   }
 });
 
-// DELETE TICKET
+/**
+ * DELETE TICKET 
+ * PUT /api/tickets/delete
+ * 
+ * request body = { id: string }
+ * 
+ * Soft deletes a specific ticket
+ * 
+ * Only accessible by SUPPORT_AGENT role
+ */
 router.put("/delete", isAuthenticated, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { id } = req.body;

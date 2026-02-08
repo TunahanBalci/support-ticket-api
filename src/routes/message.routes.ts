@@ -3,14 +3,24 @@ import express from "express";
 import { createMessage, findAllMessagesByTicketId, findAllMessagesSorted } from "../controllers/message.contoller";
 import { isAuthenticated } from "../middlewares/auth.middlewares";
 import { validatePagination, validateTicketId } from "../middlewares/validate.middlewares";
+import { generateEmbedding } from "../utils/embedding.utils";
 import { canAccessMessage, canAccessTicket, canViewAllMessages } from "../utils/permissions.utils";
 import { prisma } from "../utils/prisma.utils";
 
 const router = express.Router();
 
-// GET ALL MESSAGES WITH SORTING
-// orderBy => asc or desc
-// orderType => updatedAt or createdAt
+/**
+ * LIST ALL MESSAGES 
+ * GET /api/messages/all?orderBy=asc&orderType=createdAt&page=1&limit=10
+ * 
+ * Lists all messages with sorting and pagination
+ * 
+ * orderBy can be "asc" or "desc"
+ * orderType can be "updatedAt" or "createdAt"
+ * page defaults to 1, limit defaults to 10
+ * 
+ * Only accessible by SUPPORT_AGENT role
+ */
 router.get("/all/", isAuthenticated, validatePagination, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { orderBy, orderType } = req.query;
@@ -37,7 +47,18 @@ router.get("/all/", isAuthenticated, validatePagination, async (req: Request, re
   }
 });
 
-// GET ALL MESSAGES BY TICKET ID
+/**
+ * LIST MESSAGES BY TICKET ID
+ * GET /api/messages/ticket/:ticketId?orderBy=asc&orderType=createdAt&page=1&limit=10
+ * 
+ * Lists all messages for a specific ticket with sorting and pagination
+ * 
+ * orderBy can be "asc" or "desc"
+ * orderType can be "updatedAt" or "createdAt"
+ * page defaults to 1, limit defaults to 10
+ * 
+ * Only accessible by SUPPORT_AGENT role
+ */
 router.get("/ticket/:ticketId", isAuthenticated, validateTicketId, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { ticketId } = req.params;
@@ -71,7 +92,16 @@ router.get("/ticket/:ticketId", isAuthenticated, validateTicketId, async (req: R
   }
 });
 
-// CREATE NEW MESSAGE
+/**
+ * CREATE MESSAGE
+ * POST /api/messages/create
+ * 
+ * request body = { content: string, ticketId: string }
+ * 
+ * Creates a new message for a specific ticket
+ * 
+ * Only accessible by USER and SUPPORT_AGENT roles, but users can only create messages for their own tickets
+ */
 router.post("/create/", isAuthenticated, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { content, ticketId } = req.body;
@@ -93,6 +123,15 @@ router.post("/create/", isAuthenticated, async (req: Request, res: Response, nex
       _senderType: role,
       _ticketId: ticketId,
     });
+
+    // generate embedding
+    const embedding = await generateEmbedding(content);
+    const vectorString = `[${embedding.join(",")}]`;
+    await prisma.$executeRaw`
+      UPDATE "Messages" 
+      SET embedding = ${vectorString}::vector 
+      WHERE id = ${message.id}
+    `;
 
     res.status(201).json({ data: message, message: "Message created successfully" });
   }
