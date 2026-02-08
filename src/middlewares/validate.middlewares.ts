@@ -41,7 +41,7 @@ async function validatePassword(req: Request, res: Response, next: NextFunction)
       .max(128, { message: "Password must be at most 128 characters long" })
       .regex(/[A-Z]/, { message: "Password must contain at least one uppercase letter" })
       .regex(/\d/, { message: "Password must contain at least one number" })
-      .regex(/(.)\1{4}/, { message: "Password must not contain more than 4 consecutive identical characters" }),
+      .refine(val => !/(.)\1{4}/.test(val), { message: "Password must not contain more than 4 consecutive identical characters" }),
   });
 
   try {
@@ -113,12 +113,13 @@ async function validateMessage(req: Request, res: Response, next: NextFunction) 
 The user ID must be a valid UUID.
 */
 async function validateUserId(req: Request, res: Response, next: NextFunction) {
+  const userId = req.params.userId || req.body.userId;
   const userIdSchema = z.object({
     userId: z.uuid({ message: "Invalid user ID" }),
   });
 
   try {
-    userIdSchema.parse({ userId: req.body.userId });
+    userIdSchema.parse({ userId });
   }
   catch (err: any) {
     res.status(400);
@@ -135,12 +136,13 @@ async function validateUserId(req: Request, res: Response, next: NextFunction) {
 The ticket ID must be a valid UUID.
 */
 async function validateTicketId(req: Request, res: Response, next: NextFunction) {
+  const ticketId = req.params.ticketId || req.body.ticketId;
   const ticketIdSchema = z.object({
     ticketId: z.uuid({ message: "Invalid ticket ID" }),
   });
 
   try {
-    ticketIdSchema.parse({ ticketId: req.body.ticketId });
+    ticketIdSchema.parse({ ticketId });
   }
   catch (err: any) {
     res.status(400);
@@ -183,6 +185,7 @@ async function validatePagination(req: Request, res: Response, next: NextFunctio
     res.status(400);
     next(new Error("Invalid pagination values. Page and limit must be >= 1"));
   }
+  next();
 }
 
 export { validateEmail, validateMessage, validatePagination, validatePassword, validateTicket, validateTicketId, validateUserId };

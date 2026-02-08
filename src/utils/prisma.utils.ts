@@ -19,17 +19,6 @@ const prisma = new PrismaClient({ adapter }).$extends({
         return query(modifiedArgs);
       },
 
-      async findFirst({ args, query }) { // for soft delete
-        const modifiedArgs = {
-          ...args,
-          where: {
-            ...args.where,
-            deletedAt: null,
-          },
-        };
-
-        return query(modifiedArgs);
-      },
       async count({ args, query }) { // for soft delete
         const modifiedArgs = {
           ...args,

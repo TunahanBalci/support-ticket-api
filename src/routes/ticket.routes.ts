@@ -8,30 +8,6 @@ import { prisma } from "../utils/prisma.utils";
 
 const router = express.Router();
 
-// GET TICKET BY ID
-router.get("/:id", isAuthenticated, async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const { id } = req.params;
-    const ticket = await findTicketById(id as string);
-    const { userId, role } = (req as any).payload;
-
-    if (!ticket) {
-      res.status(404);
-      return next(new Error("Ticket not found"));
-    }
-    if (!(await canAccessTicket(userId, role, ticket))) {
-      res.status(403);
-      return next(new Error("Forbidden: You don't have permission to access this resource"));
-    }
-
-    res.status(200).json(ticket);
-  }
-  catch (err) {
-    res.status(500);
-    next(err);
-  }
-});
-
 // GET ALL TICKETS BY USER ID
 // orderBy => asc or desc
 // orderType => updatedAt or createdAt
@@ -101,6 +77,34 @@ router.get("/all/", isAuthenticated, validatePagination, async (req: Request, re
   }
 });
 
+// GET TICKET BY ID
+router.get("/:id", isAuthenticated, async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { id } = req.params;
+    const ticket = await findTicketById(id as string);
+    const { userId, role } = (req as any).payload;
+
+    if (!ticket) {
+      res.status(404);
+      return next(new Error("Ticket not found"));
+    }
+    if (ticket.deletedAt !== null) {
+      res.status(404);
+      return next(new Error("Ticket not found"));
+    }
+    if (!(await canAccessTicket(userId, role, ticket))) {
+      res.status(403);
+      return next(new Error("Forbidden: You don't have permission to access this resource"));
+    }
+
+    res.status(200).json(ticket);
+  }
+  catch (err) {
+    res.status(500);
+    next(err);
+  }
+});
+
 // CREATE TICKET
 router.post("/create", isAuthenticated, async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -150,7 +154,7 @@ router.put("/update", isAuthenticated, async (req: Request, res: Response, next:
     }
 
     const params = { title, description, status };
-    const updatedTicket = await updateTicket(id, params);
+    const updatedTicket = await updateTicket(ticket, params);
 
     res.status(200).json({ data: updatedTicket, message: "Ticket updated successfully" });
   }

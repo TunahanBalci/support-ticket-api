@@ -1,5 +1,4 @@
 import type { SenderType } from "../generated/prisma/enums";
-import { validatePagination } from "../middlewares/validate.middlewares";
 import { env } from "../utils/env.utils";
 import { buildPagination } from "../utils/pagination.utils";
 import { prisma } from "../utils/prisma.utils";

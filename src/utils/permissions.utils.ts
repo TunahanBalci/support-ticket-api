@@ -12,7 +12,7 @@ async function canAccessTicket(userId: string, role: string, ticket: Tickets) {
   if (role === "SUPPORT_AGENT") {
     return true;
   }
-  if (ticket.deletedAt !== null && ticket.userId === userId) {
+  if (ticket.userId === userId && ticket.deletedAt === null) {
     return true;
   }
   return false;
@@ -57,7 +57,7 @@ async function canAccessMessage(role: string, _userId: string, ticket: Tickets) 
   if (role === "SUPPORT_AGENT") {
     return true;
   }
-  if (ticket.deletedAt !== null && ticket.userId === _userId) {
+  if (ticket.userId === _userId && ticket.deletedAt === null) {
     return true;
   }
   return false;
