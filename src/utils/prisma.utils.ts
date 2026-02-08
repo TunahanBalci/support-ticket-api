@@ -1,9 +1,48 @@
 import { PrismaPg } from "@prisma/adapter-pg";
-import { env } from "../env";
 import { PrismaClient } from "../generated/prisma/client";
+import { env } from "./env.utils";
 
 const connectionString = `${env.DATABASE_URL}`;
 const adapter = new PrismaPg({ connectionString });
-const prisma = new PrismaClient({ adapter });
+const prisma = new PrismaClient({ adapter }).$extends({
+  query: {
+    tickets: {
+      async findMany({ args, query }) { // for soft delete
+        const modifiedArgs = {
+          ...args,
+          where: {
+            ...args.where,
+            deletedAt: null,
+          },
+        };
+
+        return query(modifiedArgs);
+      },
+
+      async findFirst({ args, query }) { // for soft delete
+        const modifiedArgs = {
+          ...args,
+          where: {
+            ...args.where,
+            deletedAt: null,
+          },
+        };
+
+        return query(modifiedArgs);
+      },
+      async count({ args, query }) { // for soft delete
+        const modifiedArgs = {
+          ...args,
+          where: {
+            ...args.where,
+            deletedAt: null,
+          },
+        };
+
+        return query(modifiedArgs);
+      },
+    },
+  },
+});
 
 export { prisma };

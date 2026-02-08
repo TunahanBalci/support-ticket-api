@@ -11,24 +11,30 @@ model Users {
   id             String  @id @default(uuid())
   email          String  @unique @db.VarChar(127)
   password       String
+  role           SenderType @default(USER)
   refreshTokens  RefreshTokens[]
   tickets        Tickets[]
- 
+
   @@index([email])
+  @@index([id])
 }
 
 model Tickets {
-  id           String   @id @default(uuid())
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  title        String   @db.VarChar(100)
-  description  String   @db.VarChar(5000)
-  status       Status   @default(OPEN)
-  userId       String   // FK
-  user         Users    @relation(fields: [userId], references: [id])
+  id           String    @id @default(uuid())
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  deletedAt    DateTime? 
+  title        String    @db.VarChar(100)
+  description  String    @db.VarChar(5000)
+  status       Status    @default(OPEN)
+  userId       String    // FK
+  user         Users     @relation(fields: [userId], references: [id])
   messages     Messages[]
 
+  @@index([id])
   @@index ([userId])
+  @@index ([status])
+  @@index ([status, deletedAt])
 }
 
 model Messages {
@@ -51,6 +57,8 @@ model RefreshTokens {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   expireAt     DateTime
+
+  @@index([userId])
 }
 
 enum Status {

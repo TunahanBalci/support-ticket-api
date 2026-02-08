@@ -1,14 +1,28 @@
 import type { NextFunction, Request, Response } from "express";
-import jwt from "jsonwebtoken";
-import { env } from "../env.js";
+import { env } from "../utils/env.utils.js";
 
-export function notFound(req: Request, res: Response, next: NextFunction) {
+/*
+@param req - Express request object
+@param res - Express response object
+@param next - Express next function
+@description - Middleware to handle 404 errors in the application.
+It sets the response status code to 404 and passes an error to the next middleware.
+*/
+function notFound(req: Request, res: Response, next: NextFunction) {
   res.status(404);
-  const error = new Error(`Not Found - ${req.originalUrl}`);
-  next(error);
+  next(new Error(`Not Found - ${req.originalUrl}`));
 }
 
-export function errorHandler(err: Error, req: Request, res: Response, _next: NextFunction) {
+/*
+@param err - Error object
+@param req - Express request object
+@param res - Express response object
+@param next - Express next function
+@description - Middleware to handle errors in the application.
+It sets the response status code based on the error and returns a JSON response with the error message and stack trace
+if mode = production
+*/
+function errorHandler(err: Error, req: Request, res: Response, _next: NextFunction) {
   const statusCode = res.statusCode !== 200 ? res.statusCode : 500;
   res.status(statusCode);
   res.json({
@@ -16,3 +30,5 @@ export function errorHandler(err: Error, req: Request, res: Response, _next: Nex
     stack: env.NODE_ENV === "production" ? "🥞" : err.stack,
   });
 }
+
+export { errorHandler, notFound };

@@ -1,5 +1,5 @@
 import app from "./app.js";
-import { env } from "./env.js";
+import { env } from "./utils/env.utils.js";
 
 const server = app.listen(env.APP_PORT, () => {
   /* eslint-disable no-console */

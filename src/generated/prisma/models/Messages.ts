@@ -359,10 +359,6 @@ export type MessagesUncheckedUpdateManyWithoutTicketNestedInput = {
   deleteMany?: Prisma.MessagesScalarWhereInput | Prisma.MessagesScalarWhereInput[]
 }
 
-export type EnumSenderTypeFieldUpdateOperationsInput = {
-  set?: $Enums.SenderType
-}
-
 export type MessagesCreateWithoutTicketInput = {
   id?: string
   createdAt?: Date | string

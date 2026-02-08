@@ -1,25 +1,22 @@
 import bcrypt from "bcryptjs";
 import express from "express";
-import { addRefreshToken, deleteRefreshTokenById, findRefreshToken, revokeTokens } from "../controllers/auth.controller";
-import { createUserByEmailAndPassword, findUserByEmail, findUserById } from "../controllers/user.controller";
+import { addRefreshToken } from "../controllers/auth.controller";
+import { createUserByEmailAndPassword, findUserByEmail } from "../controllers/user.controller";
+import { validateEmail, validatePassword } from "../middlewares/validate.middlewares";
 import { generateTokens } from "../utils/jwt.utils";
 
 const router = express.Router();
 
-router.post("/register", async (req, res, next) => {
+// REGISTER - CREATE NEW USER AND RETURN TOKENS
+router.post("/register", validateEmail, validatePassword, async (req, res, next) => {
   try {
     const { email, password } = req.body;
-
-    if (!email || !password) {
-      res.status(400);
-      throw new Error("No email AND/OR password provided");
-    }
 
     const existingUser = await findUserByEmail(email);
 
     if (existingUser) {
       res.status(400);
-      throw new Error("Email already in use.");
+      return next(new Error("Email already in use"));
     }
 
     const user = await createUserByEmailAndPassword({ email, password });
@@ -27,45 +24,54 @@ router.post("/register", async (req, res, next) => {
     await addRefreshToken(refreshToken, user.id as string);
 
     res.status(201).json({
-      accessToken,
-      refreshToken,
+      data: {
+        accessToken,
+        refreshToken,
+      },
+      message: "User registered successfully",
     });
   }
   catch (err) {
+    res.status(500);
     next(err);
   }
 });
 
+// LOGIN - AUTHENTICATE USER AND RETURN TOKENS
 router.post("/login", async (req, res, next) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
       res.status(400);
-      throw new Error("No email AND/OR password provided");
+      return next(new Error("No email AND/OR password provided"));
     }
 
     const existingUser = await findUserByEmail(email);
 
     if (!existingUser) {
       res.status(403);
-      throw new Error("Invalid login credentials.");
+      return next(new Error("Invalid login credentials"));
     }
 
     const validPassword = await bcrypt.compare(password, existingUser.password);
     if (!validPassword) {
       res.status(403);
-      throw new Error("Invalid login credentials.");
+      return next(new Error("Invalid login credentials"));
     }
 
     const { accessToken, refreshToken } = await generateTokens(existingUser);
     await addRefreshToken(refreshToken, existingUser.id as string);
 
-    res.json({
-      accessToken,
-      refreshToken,
+    res.status(200).json({
+      data: {
+        accessToken,
+        refreshToken,
+      },
+      message: "Login successful",
     });
   }
   catch (err) {
+    res.status(500);
     next(err);
   }
 });

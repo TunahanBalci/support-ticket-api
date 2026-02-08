@@ -8,6 +8,10 @@ const envSchema = z.object({
   AUTH_SECRET: z.string(),
   AUTH_ACCESS_TOKEN_EXPIRES_IN: z.string().default("1d"),
   AUTH_REFRESH_TOKEN_EXPIRES_IN: z.string().default("24h"),
+  PAGINATION_LIMIT_MESSAGE_BY_TICKET: z.coerce.number().default(190),
+  PAGINATION_LIMIT_MESSAGE_ALL: z.coerce.number().default(190),
+  PAGINATION_LIMIT_TICKET_BY_USER: z.coerce.number().default(190),
+  PAGINATION_LIMIT_TICKET_ALL: z.coerce.number().default(190),
 });
 
 try {

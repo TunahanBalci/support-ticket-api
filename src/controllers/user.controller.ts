@@ -1,14 +1,23 @@
 import { hash } from "bcryptjs";
 import { prisma } from "../utils/prisma.utils";
 
+/*
+@param email: User's email
+@description Finds a user by their email
+*/
 async function findUserByEmail(email: string) {
-  return prisma.users.findUnique({
+  return prisma.users.findFirst({
     where: {
       email,
     },
   });
 }
 
+/*
+@param user: Object containing user's email and password
+@description Creates a new user with the given email and password.
+The password is hashed before being stored in the database
+*/
 async function createUserByEmailAndPassword(user: { email: string; password: string }) {
   user.password = await hash(user.password, 12);
   return prisma.users.create({
@@ -16,8 +25,12 @@ async function createUserByEmailAndPassword(user: { email: string; password: str
   });
 }
 
+/*
+@param id: User's id
+@description Finds a user by their id
+*/
 async function findUserById(id: string) {
-  return prisma.users.findUnique({
+  return prisma.users.findFirst({
     where: {
       id,
     },

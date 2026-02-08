@@ -28,6 +28,7 @@ export type TicketsMinAggregateOutputType = {
   id: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  deletedAt: Date | null
   title: string | null
   description: string | null
   status: $Enums.Status | null
@@ -38,6 +39,7 @@ export type TicketsMaxAggregateOutputType = {
   id: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  deletedAt: Date | null
   title: string | null
   description: string | null
   status: $Enums.Status | null
@@ -48,6 +50,7 @@ export type TicketsCountAggregateOutputType = {
   id: number
   createdAt: number
   updatedAt: number
+  deletedAt: number
   title: number
   description: number
   status: number
@@ -60,6 +63,7 @@ export type TicketsMinAggregateInputType = {
   id?: true
   createdAt?: true
   updatedAt?: true
+  deletedAt?: true
   title?: true
   description?: true
   status?: true
@@ -70,6 +74,7 @@ export type TicketsMaxAggregateInputType = {
   id?: true
   createdAt?: true
   updatedAt?: true
+  deletedAt?: true
   title?: true
   description?: true
   status?: true
@@ -80,6 +85,7 @@ export type TicketsCountAggregateInputType = {
   id?: true
   createdAt?: true
   updatedAt?: true
+  deletedAt?: true
   title?: true
   description?: true
   status?: true
@@ -163,6 +169,7 @@ export type TicketsGroupByOutputType = {
   id: string
   createdAt: Date
   updatedAt: Date
+  deletedAt: Date | null
   title: string
   description: string
   status: $Enums.Status
@@ -194,6 +201,7 @@ export type TicketsWhereInput = {
   id?: Prisma.StringFilter<"Tickets"> | string
   createdAt?: Prisma.DateTimeFilter<"Tickets"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Tickets"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableFilter<"Tickets"> | Date | string | null
   title?: Prisma.StringFilter<"Tickets"> | string
   description?: Prisma.StringFilter<"Tickets"> | string
   status?: Prisma.EnumStatusFilter<"Tickets"> | $Enums.Status
@@ -206,6 +214,7 @@ export type TicketsOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -221,6 +230,7 @@ export type TicketsWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.TicketsWhereInput | Prisma.TicketsWhereInput[]
   createdAt?: Prisma.DateTimeFilter<"Tickets"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Tickets"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableFilter<"Tickets"> | Date | string | null
   title?: Prisma.StringFilter<"Tickets"> | string
   description?: Prisma.StringFilter<"Tickets"> | string
   status?: Prisma.EnumStatusFilter<"Tickets"> | $Enums.Status
@@ -233,6 +243,7 @@ export type TicketsOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -249,6 +260,7 @@ export type TicketsScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Tickets"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Tickets"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Tickets"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Tickets"> | Date | string | null
   title?: Prisma.StringWithAggregatesFilter<"Tickets"> | string
   description?: Prisma.StringWithAggregatesFilter<"Tickets"> | string
   status?: Prisma.EnumStatusWithAggregatesFilter<"Tickets"> | $Enums.Status
@@ -259,6 +271,7 @@ export type TicketsCreateInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
   title: string
   description: string
   status?: $Enums.Status
@@ -270,6 +283,7 @@ export type TicketsUncheckedCreateInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
   title: string
   description: string
   status?: $Enums.Status
@@ -281,6 +295,7 @@ export type TicketsUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
@@ -292,6 +307,7 @@ export type TicketsUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
@@ -303,6 +319,7 @@ export type TicketsCreateManyInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
   title: string
   description: string
   status?: $Enums.Status
@@ -313,6 +330,7 @@ export type TicketsUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
@@ -322,6 +340,7 @@ export type TicketsUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
@@ -342,6 +361,7 @@ export type TicketsCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -352,6 +372,7 @@ export type TicketsMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -362,6 +383,7 @@ export type TicketsMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -419,6 +441,10 @@ export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
 }
 
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
+}
+
 export type EnumStatusFieldUpdateOperationsInput = {
   set?: $Enums.Status
 }
@@ -441,6 +467,7 @@ export type TicketsCreateWithoutUserInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
   title: string
   description: string
   status?: $Enums.Status
@@ -451,6 +478,7 @@ export type TicketsUncheckedCreateWithoutUserInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
   title: string
   description: string
   status?: $Enums.Status
@@ -490,6 +518,7 @@ export type TicketsScalarWhereInput = {
   id?: Prisma.StringFilter<"Tickets"> | string
   createdAt?: Prisma.DateTimeFilter<"Tickets"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Tickets"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableFilter<"Tickets"> | Date | string | null
   title?: Prisma.StringFilter<"Tickets"> | string
   description?: Prisma.StringFilter<"Tickets"> | string
   status?: Prisma.EnumStatusFilter<"Tickets"> | $Enums.Status
@@ -500,6 +529,7 @@ export type TicketsCreateWithoutMessagesInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
   title: string
   description: string
   status?: $Enums.Status
@@ -510,6 +540,7 @@ export type TicketsUncheckedCreateWithoutMessagesInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
   title: string
   description: string
   status?: $Enums.Status
@@ -536,6 +567,7 @@ export type TicketsUpdateWithoutMessagesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
@@ -546,6 +578,7 @@ export type TicketsUncheckedUpdateWithoutMessagesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
@@ -556,6 +589,7 @@ export type TicketsCreateManyUserInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  deletedAt?: Date | string | null
   title: string
   description: string
   status?: $Enums.Status
@@ -565,6 +599,7 @@ export type TicketsUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
@@ -575,6 +610,7 @@ export type TicketsUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
@@ -585,6 +621,7 @@ export type TicketsUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
@@ -625,6 +662,7 @@ export type TicketsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   id?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  deletedAt?: boolean
   title?: boolean
   description?: boolean
   status?: boolean
@@ -638,6 +676,7 @@ export type TicketsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   id?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  deletedAt?: boolean
   title?: boolean
   description?: boolean
   status?: boolean
@@ -649,6 +688,7 @@ export type TicketsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   id?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  deletedAt?: boolean
   title?: boolean
   description?: boolean
   status?: boolean
@@ -660,13 +700,14 @@ export type TicketsSelectScalar = {
   id?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  deletedAt?: boolean
   title?: boolean
   description?: boolean
   status?: boolean
   userId?: boolean
 }
 
-export type TicketsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "title" | "description" | "status" | "userId", ExtArgs["result"]["tickets"]>
+export type TicketsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "deletedAt" | "title" | "description" | "status" | "userId", ExtArgs["result"]["tickets"]>
 export type TicketsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UsersDefaultArgs<ExtArgs>
   messages?: boolean | Prisma.Tickets$messagesArgs<ExtArgs>
@@ -689,6 +730,7 @@ export type $TicketsPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     id: string
     createdAt: Date
     updatedAt: Date
+    deletedAt: Date | null
     title: string
     description: string
     status: $Enums.Status
@@ -1121,6 +1163,7 @@ export interface TicketsFieldRefs {
   readonly id: Prisma.FieldRef<"Tickets", 'String'>
   readonly createdAt: Prisma.FieldRef<"Tickets", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Tickets", 'DateTime'>
+  readonly deletedAt: Prisma.FieldRef<"Tickets", 'DateTime'>
   readonly title: Prisma.FieldRef<"Tickets", 'String'>
   readonly description: Prisma.FieldRef<"Tickets", 'String'>
   readonly status: Prisma.FieldRef<"Tickets", 'Status'>

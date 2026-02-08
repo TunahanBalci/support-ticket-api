@@ -28,18 +28,21 @@ export type UsersMinAggregateOutputType = {
   id: string | null
   email: string | null
   password: string | null
+  role: $Enums.SenderType | null
 }
 
 export type UsersMaxAggregateOutputType = {
   id: string | null
   email: string | null
   password: string | null
+  role: $Enums.SenderType | null
 }
 
 export type UsersCountAggregateOutputType = {
   id: number
   email: number
   password: number
+  role: number
   _all: number
 }
 
@@ -48,18 +51,21 @@ export type UsersMinAggregateInputType = {
   id?: true
   email?: true
   password?: true
+  role?: true
 }
 
 export type UsersMaxAggregateInputType = {
   id?: true
   email?: true
   password?: true
+  role?: true
 }
 
 export type UsersCountAggregateInputType = {
   id?: true
   email?: true
   password?: true
+  role?: true
   _all?: true
 }
 
@@ -139,6 +145,7 @@ export type UsersGroupByOutputType = {
   id: string
   email: string
   password: string
+  role: $Enums.SenderType
   _count: UsersCountAggregateOutputType | null
   _min: UsersMinAggregateOutputType | null
   _max: UsersMaxAggregateOutputType | null
@@ -166,6 +173,7 @@ export type UsersWhereInput = {
   id?: Prisma.StringFilter<"Users"> | string
   email?: Prisma.StringFilter<"Users"> | string
   password?: Prisma.StringFilter<"Users"> | string
+  role?: Prisma.EnumSenderTypeFilter<"Users"> | $Enums.SenderType
   refreshTokens?: Prisma.RefreshTokensListRelationFilter
   tickets?: Prisma.TicketsListRelationFilter
 }
@@ -174,6 +182,7 @@ export type UsersOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
+  role?: Prisma.SortOrder
   refreshTokens?: Prisma.RefreshTokensOrderByRelationAggregateInput
   tickets?: Prisma.TicketsOrderByRelationAggregateInput
 }
@@ -185,6 +194,7 @@ export type UsersWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.UsersWhereInput[]
   NOT?: Prisma.UsersWhereInput | Prisma.UsersWhereInput[]
   password?: Prisma.StringFilter<"Users"> | string
+  role?: Prisma.EnumSenderTypeFilter<"Users"> | $Enums.SenderType
   refreshTokens?: Prisma.RefreshTokensListRelationFilter
   tickets?: Prisma.TicketsListRelationFilter
 }, "id" | "email">
@@ -193,6 +203,7 @@ export type UsersOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
+  role?: Prisma.SortOrder
   _count?: Prisma.UsersCountOrderByAggregateInput
   _max?: Prisma.UsersMaxOrderByAggregateInput
   _min?: Prisma.UsersMinOrderByAggregateInput
@@ -205,12 +216,14 @@ export type UsersScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Users"> | string
   email?: Prisma.StringWithAggregatesFilter<"Users"> | string
   password?: Prisma.StringWithAggregatesFilter<"Users"> | string
+  role?: Prisma.EnumSenderTypeWithAggregatesFilter<"Users"> | $Enums.SenderType
 }
 
 export type UsersCreateInput = {
   id?: string
   email: string
   password: string
+  role?: $Enums.SenderType
   refreshTokens?: Prisma.RefreshTokensCreateNestedManyWithoutUserInput
   tickets?: Prisma.TicketsCreateNestedManyWithoutUserInput
 }
@@ -219,6 +232,7 @@ export type UsersUncheckedCreateInput = {
   id?: string
   email: string
   password: string
+  role?: $Enums.SenderType
   refreshTokens?: Prisma.RefreshTokensUncheckedCreateNestedManyWithoutUserInput
   tickets?: Prisma.TicketsUncheckedCreateNestedManyWithoutUserInput
 }
@@ -227,6 +241,7 @@ export type UsersUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumSenderTypeFieldUpdateOperationsInput | $Enums.SenderType
   refreshTokens?: Prisma.RefreshTokensUpdateManyWithoutUserNestedInput
   tickets?: Prisma.TicketsUpdateManyWithoutUserNestedInput
 }
@@ -235,6 +250,7 @@ export type UsersUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumSenderTypeFieldUpdateOperationsInput | $Enums.SenderType
   refreshTokens?: Prisma.RefreshTokensUncheckedUpdateManyWithoutUserNestedInput
   tickets?: Prisma.TicketsUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -243,36 +259,42 @@ export type UsersCreateManyInput = {
   id?: string
   email: string
   password: string
+  role?: $Enums.SenderType
 }
 
 export type UsersUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumSenderTypeFieldUpdateOperationsInput | $Enums.SenderType
 }
 
 export type UsersUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumSenderTypeFieldUpdateOperationsInput | $Enums.SenderType
 }
 
 export type UsersCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
+  role?: Prisma.SortOrder
 }
 
 export type UsersMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
+  role?: Prisma.SortOrder
 }
 
 export type UsersMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
+  role?: Prisma.SortOrder
 }
 
 export type UsersScalarRelationFilter = {
@@ -282,6 +304,10 @@ export type UsersScalarRelationFilter = {
 
 export type StringFieldUpdateOperationsInput = {
   set?: string
+}
+
+export type EnumSenderTypeFieldUpdateOperationsInput = {
+  set?: $Enums.SenderType
 }
 
 export type UsersCreateNestedOneWithoutTicketsInput = {
@@ -316,6 +342,7 @@ export type UsersCreateWithoutTicketsInput = {
   id?: string
   email: string
   password: string
+  role?: $Enums.SenderType
   refreshTokens?: Prisma.RefreshTokensCreateNestedManyWithoutUserInput
 }
 
@@ -323,6 +350,7 @@ export type UsersUncheckedCreateWithoutTicketsInput = {
   id?: string
   email: string
   password: string
+  role?: $Enums.SenderType
   refreshTokens?: Prisma.RefreshTokensUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -346,6 +374,7 @@ export type UsersUpdateWithoutTicketsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumSenderTypeFieldUpdateOperationsInput | $Enums.SenderType
   refreshTokens?: Prisma.RefreshTokensUpdateManyWithoutUserNestedInput
 }
 
@@ -353,6 +382,7 @@ export type UsersUncheckedUpdateWithoutTicketsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumSenderTypeFieldUpdateOperationsInput | $Enums.SenderType
   refreshTokens?: Prisma.RefreshTokensUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -360,6 +390,7 @@ export type UsersCreateWithoutRefreshTokensInput = {
   id?: string
   email: string
   password: string
+  role?: $Enums.SenderType
   tickets?: Prisma.TicketsCreateNestedManyWithoutUserInput
 }
 
@@ -367,6 +398,7 @@ export type UsersUncheckedCreateWithoutRefreshTokensInput = {
   id?: string
   email: string
   password: string
+  role?: $Enums.SenderType
   tickets?: Prisma.TicketsUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -390,6 +422,7 @@ export type UsersUpdateWithoutRefreshTokensInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumSenderTypeFieldUpdateOperationsInput | $Enums.SenderType
   tickets?: Prisma.TicketsUpdateManyWithoutUserNestedInput
 }
 
@@ -397,6 +430,7 @@ export type UsersUncheckedUpdateWithoutRefreshTokensInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumSenderTypeFieldUpdateOperationsInput | $Enums.SenderType
   tickets?: Prisma.TicketsUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -444,6 +478,7 @@ export type UsersSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   id?: boolean
   email?: boolean
   password?: boolean
+  role?: boolean
   refreshTokens?: boolean | Prisma.Users$refreshTokensArgs<ExtArgs>
   tickets?: boolean | Prisma.Users$ticketsArgs<ExtArgs>
   _count?: boolean | Prisma.UsersCountOutputTypeDefaultArgs<ExtArgs>
@@ -453,21 +488,24 @@ export type UsersSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   id?: boolean
   email?: boolean
   password?: boolean
+  role?: boolean
 }, ExtArgs["result"]["users"]>
 
 export type UsersSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   email?: boolean
   password?: boolean
+  role?: boolean
 }, ExtArgs["result"]["users"]>
 
 export type UsersSelectScalar = {
   id?: boolean
   email?: boolean
   password?: boolean
+  role?: boolean
 }
 
-export type UsersOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "password", ExtArgs["result"]["users"]>
+export type UsersOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "password" | "role", ExtArgs["result"]["users"]>
 export type UsersInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   refreshTokens?: boolean | Prisma.Users$refreshTokensArgs<ExtArgs>
   tickets?: boolean | Prisma.Users$ticketsArgs<ExtArgs>
@@ -486,6 +524,7 @@ export type $UsersPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     id: string
     email: string
     password: string
+    role: $Enums.SenderType
   }, ExtArgs["result"]["users"]>
   composites: {}
 }
@@ -914,6 +953,7 @@ export interface UsersFieldRefs {
   readonly id: Prisma.FieldRef<"Users", 'String'>
   readonly email: Prisma.FieldRef<"Users", 'String'>
   readonly password: Prisma.FieldRef<"Users", 'String'>
+  readonly role: Prisma.FieldRef<"Users", 'SenderType'>
 }
     
 
