@@ -1,4 +1,3 @@
-
 # Support Ticket API
 
 A robust, scalable REST API for managing support tickets, featuring asynchronous processing, real-time Slack notifications, and semantic search capabilities using local LLM embeddings.
@@ -171,3 +170,242 @@ Start the application and visit:
 -   **Messages**: `/api/v1/message/create`, `/api/v1/message/ticket/{ticketId}`
 -   **Search**: `/api/v1/search?query=...` (Semantic Search)
 
+### Example API Calls (curl)
+
+All examples assume the application is running in production mode via `docker compose up -d` on `localhost:8000`.
+
+> **Tip**: Many endpoints require authentication. First, register or log in to obtain an access token, then pass it as a `Bearer` token in subsequent requests.
+
+#### 1. Register a New User
+
+```bash
+curl -X POST http://localhost:8000/api/v1/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{\n    "email": "user@example.com",\n    "password": "SecurePass123!"\n  }'
+```
+
+**Expected Response** (`201 Created`):
+```json
+{
+  "data": {
+    "accessToken": "eyJhbGciOiJIUzI1NiIs...",
+    "refreshToken": "eyJhbGciOiJIUzI1NiIs..."
+  },
+  "message": "User registered successfully"
+}
+```
+
+#### 2. Log In
+
+```bash
+curl -X POST http://localhost:8000/api/v1/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{\n    "email": "user@example.com",\n    "password": "SecurePass123!"\n  }'
+```
+
+**Expected Response** (`200 OK`):
+```json
+{
+  "data": {
+    "accessToken": "eyJhbGciOiJIUzI1NiIs...",
+    "refreshToken": "eyJhbGciOiJIUzI1NiIs..."
+  },
+  "message": "Login successful"
+}
+```
+
+> **Note**: Save the `accessToken` value. All the following requests use it as `$ACCESS_TOKEN`.
+
+#### 3. Create a Ticket
+
+```bash
+curl -X POST http://localhost:8000/api/v1/ticket/create \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  -d '{\n    "title": "Cannot reset my password",\n    "description": "I clicked the reset link but the page returns a 404 error."\n  }'
+```
+
+**Expected Response** (`201 Created`):
+```json
+{
+  "data": {
+    "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "title": "Cannot reset my password",
+    "description": "I clicked the reset link but the page returns a 404 error.",
+    "status": "OPEN",
+    "userId": "...",
+    "createdAt": "2026-02-09T12:00:00.000Z",
+    "updatedAt": "2026-02-09T12:00:00.000Z"
+  },
+  "message": "Ticket created successfully"
+}
+```
+
+#### 4. Get a Ticket by ID
+
+```bash
+curl -X GET http://localhost:8000/api/v1/ticket/<TICKET_ID> \
+  -H "Authorization: Bearer $ACCESS_TOKEN"
+```
+
+**Expected Response** (`200 OK`):
+```json
+{
+  "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "title": "Cannot reset my password",
+  "description": "I clicked the reset link but the page returns a 404 error.",
+  "status": "OPEN",
+  "userId": "...",
+  "createdAt": "2026-02-09T12:00:00.000Z",
+  "updatedAt": "2026-02-09T12:00:00.000Z"
+}
+```
+
+#### 5. List Tickets by User ID
+
+```bash
+curl -X GET "http://localhost:8000/api/v1/ticket/user/<USER_ID>?page=1&limit=10&orderBy=desc&orderType=createdAt" \
+  -H "Authorization: Bearer $ACCESS_TOKEN"
+```
+
+**Expected Response** (`200 OK`):
+```json
+{
+  "data": [ ... ],
+  "totalPages": 1,
+  "currentPage": 1
+}
+```
+
+#### 6. List All Tickets (Support Agent Only)
+
+```bash
+curl -X GET "http://localhost:8000/api/v1/ticket/all/?page=1&limit=10&orderBy=desc&orderType=createdAt" \
+  -H "Authorization: Bearer $ACCESS_TOKEN"
+```
+
+**Expected Response** (`200 OK`):
+```json
+{
+  "data": [ ... ],
+  "totalPages": 1,
+  "currentPage": 1
+}
+```
+
+#### 7. Update a Ticket
+
+```bash
+curl -X PUT http://localhost:8000/api/v1/ticket/update \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  -d '{\n    "id": "<TICKET_ID>",\n    "title": "Updated title",\n    "description": "Updated description",\n    "status": "IN_PROGRESS"\n  }'
+```
+
+**Expected Response** (`200 OK`):
+```json
+{
+  "data": { ... },
+  "message": "Ticket updated successfully"
+}
+```
+
+#### 8. Delete a Ticket (Soft Delete — Support Agent Only)
+
+```bash
+curl -X PUT http://localhost:8000/api/v1/ticket/delete \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  -d '{\n    "id": "<TICKET_ID>"\n  }'
+```
+
+**Expected Response** (`200 OK`):
+```json
+{
+  "message": "Ticket deleted successfully"
+}
+```
+
+#### 9. Create a Message on a Ticket
+
+```bash
+curl -X POST http://localhost:8000/api/v1/message/create \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  -d '{\n    "content": "I have tried clearing my browser cache but the issue persists.",\n    "ticketId": "<TICKET_ID>"\n  }'
+```
+
+**Expected Response** (`201 Created`):
+```json
+{
+  "data": {
+    "id": "...",
+    "content": "I have tried clearing my browser cache but the issue persists.",
+    "senderType": "USER",
+    "ticketId": "...",
+    "createdAt": "2026-02-09T12:05:00.000Z",
+    "updatedAt": "2026-02-09T12:05:00.000Z"
+  },
+  "message": "Message created successfully"
+}
+```
+
+#### 10. List Messages by Ticket ID
+
+```bash
+curl -X GET "http://localhost:8000/api/v1/message/ticket/<TICKET_ID>?page=1&limit=10&orderBy=asc&orderType=createdAt" \
+  -H "Authorization: Bearer $ACCESS_TOKEN"
+```
+
+**Expected Response** (`200 OK`):
+```json
+{
+  "data": [ ... ],
+  "message": "Messages retrieved successfully"
+}
+```
+
+#### 11. List All Messages (Support Agent Only)
+
+```bash
+curl -X GET "http://localhost:8000/api/v1/message/all/?page=1&limit=10&orderBy=desc&orderType=createdAt" \
+  -H "Authorization: Bearer $ACCESS_TOKEN"
+```
+
+**Expected Response** (`200 OK`):
+```json
+{
+  "data": [ ... ],
+  "message": "Messages retrieved successfully"
+}
+```
+
+#### 12. Semantic Search
+
+```bash
+curl -X GET "http://localhost:8000/api/v1/search?query=password%20reset%20not%20working&limit=5" \
+  -H "Authorization: Bearer $ACCESS_TOKEN"
+```
+
+**Expected Response** (`200 OK`):
+```json
+{
+  "query": "password reset not working",
+  "tickets": [
+    {
+      "id": "...",
+      "title": "Cannot reset my password",
+      "description": "I clicked the reset link but the page returns a 404 error.",
+      "similarity": 0.92
+    }
+  ],
+  "messages": [
+    {
+      "id": "...",
+      "content": "I have tried clearing my browser cache but the issue persists.",
+      "ticketId": "...",
+      "similarity": 0.78
+    }
+  ]
+}
+```
