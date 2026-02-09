@@ -12,6 +12,10 @@ const envSchema = z.object({
   PAGINATION_LIMIT_MESSAGE_ALL: z.coerce.number().default(190),
   PAGINATION_LIMIT_TICKET_BY_USER: z.coerce.number().default(190),
   PAGINATION_LIMIT_TICKET_ALL: z.coerce.number().default(190),
+  REDIS_HOST: z.string().default("localhost"),
+  REDIS_PORT: z.coerce.number().default(6379),
+  REDIS_PASSWORD: z.string().optional(),
+  SLACK_WEBHOOK_URL: z.string().url(),
 });
 
 try {
@@ -24,6 +28,9 @@ catch (error) {
   }
   else {
     console.error(error);
+  }
+  if (process.env.NODE_ENV === "test") {
+    throw new Error(`Invalid environment variables: ${JSON.stringify((error as z.ZodError).issues)}`);
   }
   process.exit(1);
 }

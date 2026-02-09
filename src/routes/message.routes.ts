@@ -3,15 +3,15 @@ import express from "express";
 import { createMessage, findAllMessagesByTicketId, findAllMessagesSorted } from "../controllers/message.contoller";
 import { isAuthenticated } from "../middlewares/auth.middlewares";
 import { validatePagination, validateTicketId } from "../middlewares/validate.middlewares";
-import { generateEmbedding } from "../utils/embedding.utils";
 import { canAccessMessage, canAccessTicket, canViewAllMessages } from "../utils/permissions.utils";
+import { indexMessage } from "../services/semantic.service";
 import { prisma } from "../utils/prisma.utils";
 
 const router = express.Router();
 
 /**
  * LIST ALL MESSAGES 
- * GET /api/messages/all?orderBy=asc&orderType=createdAt&page=1&limit=10
+ * GET /api/v1/messages/all?orderBy=asc&orderType=createdAt&page=1&limit=10
  * 
  * Lists all messages with sorting and pagination
  * 
@@ -49,7 +49,7 @@ router.get("/all/", isAuthenticated, validatePagination, async (req: Request, re
 
 /**
  * LIST MESSAGES BY TICKET ID
- * GET /api/messages/ticket/:ticketId?orderBy=asc&orderType=createdAt&page=1&limit=10
+ * GET /api/v1/messages/ticket/:ticketId?orderBy=asc&orderType=createdAt&page=1&limit=10
  * 
  * Lists all messages for a specific ticket with sorting and pagination
  * 
@@ -94,7 +94,7 @@ router.get("/ticket/:ticketId", isAuthenticated, validateTicketId, async (req: R
 
 /**
  * CREATE MESSAGE
- * POST /api/messages/create
+ * POST /api/v1/messages/create
  * 
  * request body = { content: string, ticketId: string }
  * 
@@ -124,14 +124,8 @@ router.post("/create/", isAuthenticated, async (req: Request, res: Response, nex
       _ticketId: ticketId,
     });
 
-    // generate embedding
-    const embedding = await generateEmbedding(content);
-    const vectorString = `[${embedding.join(",")}]`;
-    await prisma.$executeRaw`
-      UPDATE "Messages" 
-      SET embedding = ${vectorString}::vector 
-      WHERE id = ${message.id}
-    `;
+    // generate embedding 
+    await indexMessage(message.id, content);
 
     res.status(201).json({ data: message, message: "Message created successfully" });
   }

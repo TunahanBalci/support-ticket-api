@@ -14,14 +14,14 @@ describe("Message Integration Tests", () => {
     const agent = await createTestUser("msg_agent@example.com", "SUPPORT_AGENT");
 
     const ticketRes = await request(app)
-      .post("/api/ticket/create")
+      .post("/api/v1/ticket/create")
       .set("Authorization", `Bearer ${user.token}`)
       .send({ title: "Message Test Ticket", description: "Testing messages" });
     const ticketId = ticketRes.body.data.id;
 
     // 2. User creates a message
     const msg1Res = await request(app)
-      .post("/api/message/create")
+      .post("/api/v1/message/create")
       .set("Authorization", `Bearer ${user.token}`)
       .send({
         content: "Help me please",
@@ -35,7 +35,7 @@ describe("Message Integration Tests", () => {
     expect(msg1InDb?.content).toBe("Help me please");
 
     const msg2Res = await request(app)
-      .post("/api/message/create")
+      .post("/api/v1/message/create")
       .set("Authorization", `Bearer ${agent.token}`)
       .send({
         content: "I am here to help",
@@ -46,7 +46,7 @@ describe("Message Integration Tests", () => {
     expect(msg2Res.body.data.senderType).toBe("SUPPORT_AGENT");
 
     const listRes = await request(app)
-      .get(`/api/message/ticket/${ticketId}`)
+      .get(`/api/v1/message/ticket/${ticketId}`)
       .set("Authorization", `Bearer ${user.token}`);
 
     expect(listRes.status).toBe(200);
@@ -65,13 +65,13 @@ describe("Message Integration Tests", () => {
     const intruder = await createTestUser("intruder@example.com");
 
     const ticketRes = await request(app)
-      .post("/api/ticket/create")
+      .post("/api/v1/ticket/create")
       .set("Authorization", `Bearer ${owner.token}`)
       .send({ title: "Private Ticket", description: "..." });
     const ticketId = ticketRes.body.data.id;
 
     const msgRes = await request(app)
-      .post("/api/message/create")
+      .post("/api/v1/message/create")
       .set("Authorization", `Bearer ${intruder.token}`)
       .send({
         content: "I shouldn't be here",

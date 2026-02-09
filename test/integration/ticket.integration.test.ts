@@ -13,7 +13,7 @@ describe("Ticket Integration Tests", () => {
     const { token, userId } = await createTestUser("ticket_user@example.com");
 
     const createRes = await request(app)
-      .post("/api/ticket/create")
+      .post("/api/v1/ticket/create")
       .set("Authorization", `Bearer ${token}`)
       .send({
         title: "Integration Test Ticket",
@@ -36,14 +36,14 @@ describe("Ticket Integration Tests", () => {
     });
 
     const getRes = await request(app)
-      .get(`/api/ticket/${ticketId}`)
+      .get(`/api/v1/ticket/${ticketId}`)
       .set("Authorization", `Bearer ${token}`);
 
     expect(getRes.status).toBe(200);
     expect(getRes.body.id).toBe(ticketId);
 
     const updateRes = await request(app)
-      .put("/api/ticket/update")
+      .put("/api/v1/ticket/update")
       .set("Authorization", `Bearer ${token}`)
       .send({
         id: ticketId,
@@ -59,7 +59,7 @@ describe("Ticket Integration Tests", () => {
     expect(updatedTicket?.status).toBe("PENDING");
 
     const deleteRes = await request(app)
-      .put("/api/ticket/delete")
+      .put("/api/v1/ticket/delete")
       .set("Authorization", `Bearer ${token}`)
       .send({ id: ticketId });
 
@@ -69,7 +69,7 @@ describe("Ticket Integration Tests", () => {
     expect(deletedTicket?.deletedAt).not.toBeNull();
 
     const accessRes = await request(app)
-      .get(`/api/ticket/${ticketId}`)
+      .get(`/api/v1/ticket/${ticketId}`)
       .set("Authorization", `Bearer ${token}`);
 
     expect(accessRes.status).toBe(404);
@@ -84,7 +84,7 @@ describe("Ticket Integration Tests", () => {
     const user2 = await createTestUser("user2@example.com");
 
     const createRes = await request(app)
-      .post("/api/ticket/create")
+      .post("/api/v1/ticket/create")
       .set("Authorization", `Bearer ${user1.token}`)
       .send({ title: "User 1 Ticket", description: "Secret" });
 
@@ -95,7 +95,7 @@ describe("Ticket Integration Tests", () => {
     const ticketId = createRes.body.data.id;
 
     const getRes = await request(app)
-      .get(`/api/ticket/${ticketId}`)
+      .get(`/api/v1/ticket/${ticketId}`)
       .set("Authorization", `Bearer ${user2.token}`);
 
     expect(getRes.status).toBe(403);
@@ -110,14 +110,14 @@ describe("Ticket Integration Tests", () => {
     const agent = await createTestUser("agent@example.com", "SUPPORT_AGENT");
 
     const createRes = await request(app)
-      .post("/api/ticket/create")
+      .post("/api/v1/ticket/create")
       .set("Authorization", `Bearer ${user.token}`)
       .send({ title: "Help me", description: "Support needed" });
     const ticketId = createRes.body.data.id;
 
     // Agent accesses ticket
     const getRes = await request(app)
-      .get(`/api/ticket/${ticketId}`)
+      .get(`/api/v1/ticket/${ticketId}`)
       .set("Authorization", `Bearer ${agent.token}`);
 
     expect(getRes.status).toBe(200);

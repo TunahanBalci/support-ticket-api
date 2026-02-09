@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3000/api/",
+      "url": "http://localhost:3000/api/v1/",
       "description": "Local Development Server"
     }
   ],
@@ -134,8 +134,11 @@
       "description": "Ticket management endpoints"
     },
     {
-      "name": "Message",
       "description": "Message management endpoints"
+    },
+    {
+      "name": "Search",
+      "description": "Semantic search endpoints"
     }
   ],
   "paths": {
@@ -806,6 +809,45 @@
           },
           "404": {
             "description": "Parent ticket not found"
+          }
+        }
+      }
+    },
+    "/search": {
+      "get": {
+        "summary": "Semantic Search",
+        "tags": [
+          "Search"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The search query text"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "default": 5,
+              "maximum": 20
+            },
+            "description": "Maximum number of results to return"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Search results"
           }
         }
       }

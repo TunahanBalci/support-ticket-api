@@ -1,5 +1,6 @@
 import type { Status } from "../generated/prisma/browser";
 import type { Tickets } from "../generated/prisma/client";
+import { slackNotificationQueue } from "../config/queue";
 import { env } from "../utils/env.utils";
 import { buildPagination } from "../utils/pagination.utils";
 import { prisma } from "../utils/prisma.utils";
@@ -117,17 +118,27 @@ async function findAllTicketsSorted(status?: string, pagination?: { page: number
  * @param _userId - string
  * @param _title - string
  * @param _description - string
+ * @param _status? - string
  *
  * Creates a new ticket for the user with the given userId.
  */
-async function createTicket(_userId: string, _title: string, _description: string) {
-  return prisma.tickets.create({
+async function createTicket(_userId: string, _title: string, _description: string, _status?: string) {
+  const ticket = await prisma.tickets.create({
     data: {
       userId: _userId,
       title: _title,
       description: _description,
+      status: _status as Status,
     },
   });
+
+  await slackNotificationQueue.add("send-slack-notification", {
+    ticketId: ticket.id,
+    title: ticket.title,
+    description: ticket.description,
+  });
+
+  return ticket;
 }
 
 /**

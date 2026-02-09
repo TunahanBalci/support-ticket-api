@@ -29,6 +29,7 @@ export type UsersMinAggregateOutputType = {
   email: string | null
   password: string | null
   role: $Enums.SenderType | null
+  country: string | null
 }
 
 export type UsersMaxAggregateOutputType = {
@@ -36,6 +37,7 @@ export type UsersMaxAggregateOutputType = {
   email: string | null
   password: string | null
   role: $Enums.SenderType | null
+  country: string | null
 }
 
 export type UsersCountAggregateOutputType = {
@@ -43,6 +45,7 @@ export type UsersCountAggregateOutputType = {
   email: number
   password: number
   role: number
+  country: number
   _all: number
 }
 
@@ -52,6 +55,7 @@ export type UsersMinAggregateInputType = {
   email?: true
   password?: true
   role?: true
+  country?: true
 }
 
 export type UsersMaxAggregateInputType = {
@@ -59,6 +63,7 @@ export type UsersMaxAggregateInputType = {
   email?: true
   password?: true
   role?: true
+  country?: true
 }
 
 export type UsersCountAggregateInputType = {
@@ -66,6 +71,7 @@ export type UsersCountAggregateInputType = {
   email?: true
   password?: true
   role?: true
+  country?: true
   _all?: true
 }
 
@@ -146,6 +152,7 @@ export type UsersGroupByOutputType = {
   email: string
   password: string
   role: $Enums.SenderType
+  country: string | null
   _count: UsersCountAggregateOutputType | null
   _min: UsersMinAggregateOutputType | null
   _max: UsersMaxAggregateOutputType | null
@@ -174,6 +181,7 @@ export type UsersWhereInput = {
   email?: Prisma.StringFilter<"Users"> | string
   password?: Prisma.StringFilter<"Users"> | string
   role?: Prisma.EnumSenderTypeFilter<"Users"> | $Enums.SenderType
+  country?: Prisma.StringNullableFilter<"Users"> | string | null
   refreshTokens?: Prisma.RefreshTokensListRelationFilter
   tickets?: Prisma.TicketsListRelationFilter
 }
@@ -183,6 +191,7 @@ export type UsersOrderByWithRelationInput = {
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  country?: Prisma.SortOrderInput | Prisma.SortOrder
   refreshTokens?: Prisma.RefreshTokensOrderByRelationAggregateInput
   tickets?: Prisma.TicketsOrderByRelationAggregateInput
 }
@@ -195,6 +204,7 @@ export type UsersWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.UsersWhereInput | Prisma.UsersWhereInput[]
   password?: Prisma.StringFilter<"Users"> | string
   role?: Prisma.EnumSenderTypeFilter<"Users"> | $Enums.SenderType
+  country?: Prisma.StringNullableFilter<"Users"> | string | null
   refreshTokens?: Prisma.RefreshTokensListRelationFilter
   tickets?: Prisma.TicketsListRelationFilter
 }, "id" | "email">
@@ -204,6 +214,7 @@ export type UsersOrderByWithAggregationInput = {
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  country?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.UsersCountOrderByAggregateInput
   _max?: Prisma.UsersMaxOrderByAggregateInput
   _min?: Prisma.UsersMinOrderByAggregateInput
@@ -217,6 +228,7 @@ export type UsersScalarWhereWithAggregatesInput = {
   email?: Prisma.StringWithAggregatesFilter<"Users"> | string
   password?: Prisma.StringWithAggregatesFilter<"Users"> | string
   role?: Prisma.EnumSenderTypeWithAggregatesFilter<"Users"> | $Enums.SenderType
+  country?: Prisma.StringNullableWithAggregatesFilter<"Users"> | string | null
 }
 
 export type UsersCreateInput = {
@@ -224,6 +236,7 @@ export type UsersCreateInput = {
   email: string
   password: string
   role?: $Enums.SenderType
+  country?: string | null
   refreshTokens?: Prisma.RefreshTokensCreateNestedManyWithoutUserInput
   tickets?: Prisma.TicketsCreateNestedManyWithoutUserInput
 }
@@ -233,6 +246,7 @@ export type UsersUncheckedCreateInput = {
   email: string
   password: string
   role?: $Enums.SenderType
+  country?: string | null
   refreshTokens?: Prisma.RefreshTokensUncheckedCreateNestedManyWithoutUserInput
   tickets?: Prisma.TicketsUncheckedCreateNestedManyWithoutUserInput
 }
@@ -242,6 +256,7 @@ export type UsersUpdateInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumSenderTypeFieldUpdateOperationsInput | $Enums.SenderType
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokens?: Prisma.RefreshTokensUpdateManyWithoutUserNestedInput
   tickets?: Prisma.TicketsUpdateManyWithoutUserNestedInput
 }
@@ -251,6 +266,7 @@ export type UsersUncheckedUpdateInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumSenderTypeFieldUpdateOperationsInput | $Enums.SenderType
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokens?: Prisma.RefreshTokensUncheckedUpdateManyWithoutUserNestedInput
   tickets?: Prisma.TicketsUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -260,6 +276,7 @@ export type UsersCreateManyInput = {
   email: string
   password: string
   role?: $Enums.SenderType
+  country?: string | null
 }
 
 export type UsersUpdateManyMutationInput = {
@@ -267,6 +284,7 @@ export type UsersUpdateManyMutationInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumSenderTypeFieldUpdateOperationsInput | $Enums.SenderType
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type UsersUncheckedUpdateManyInput = {
@@ -274,6 +292,7 @@ export type UsersUncheckedUpdateManyInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumSenderTypeFieldUpdateOperationsInput | $Enums.SenderType
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type UsersCountOrderByAggregateInput = {
@@ -281,6 +300,7 @@ export type UsersCountOrderByAggregateInput = {
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  country?: Prisma.SortOrder
 }
 
 export type UsersMaxOrderByAggregateInput = {
@@ -288,6 +308,7 @@ export type UsersMaxOrderByAggregateInput = {
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  country?: Prisma.SortOrder
 }
 
 export type UsersMinOrderByAggregateInput = {
@@ -295,6 +316,7 @@ export type UsersMinOrderByAggregateInput = {
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  country?: Prisma.SortOrder
 }
 
 export type UsersScalarRelationFilter = {
@@ -308,6 +330,10 @@ export type StringFieldUpdateOperationsInput = {
 
 export type EnumSenderTypeFieldUpdateOperationsInput = {
   set?: $Enums.SenderType
+}
+
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
 }
 
 export type UsersCreateNestedOneWithoutTicketsInput = {
@@ -343,6 +369,7 @@ export type UsersCreateWithoutTicketsInput = {
   email: string
   password: string
   role?: $Enums.SenderType
+  country?: string | null
   refreshTokens?: Prisma.RefreshTokensCreateNestedManyWithoutUserInput
 }
 
@@ -351,6 +378,7 @@ export type UsersUncheckedCreateWithoutTicketsInput = {
   email: string
   password: string
   role?: $Enums.SenderType
+  country?: string | null
   refreshTokens?: Prisma.RefreshTokensUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -375,6 +403,7 @@ export type UsersUpdateWithoutTicketsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumSenderTypeFieldUpdateOperationsInput | $Enums.SenderType
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokens?: Prisma.RefreshTokensUpdateManyWithoutUserNestedInput
 }
 
@@ -383,6 +412,7 @@ export type UsersUncheckedUpdateWithoutTicketsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumSenderTypeFieldUpdateOperationsInput | $Enums.SenderType
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokens?: Prisma.RefreshTokensUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -391,6 +421,7 @@ export type UsersCreateWithoutRefreshTokensInput = {
   email: string
   password: string
   role?: $Enums.SenderType
+  country?: string | null
   tickets?: Prisma.TicketsCreateNestedManyWithoutUserInput
 }
 
@@ -399,6 +430,7 @@ export type UsersUncheckedCreateWithoutRefreshTokensInput = {
   email: string
   password: string
   role?: $Enums.SenderType
+  country?: string | null
   tickets?: Prisma.TicketsUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -423,6 +455,7 @@ export type UsersUpdateWithoutRefreshTokensInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumSenderTypeFieldUpdateOperationsInput | $Enums.SenderType
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tickets?: Prisma.TicketsUpdateManyWithoutUserNestedInput
 }
 
@@ -431,6 +464,7 @@ export type UsersUncheckedUpdateWithoutRefreshTokensInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumSenderTypeFieldUpdateOperationsInput | $Enums.SenderType
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tickets?: Prisma.TicketsUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -479,6 +513,7 @@ export type UsersSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   email?: boolean
   password?: boolean
   role?: boolean
+  country?: boolean
   refreshTokens?: boolean | Prisma.Users$refreshTokensArgs<ExtArgs>
   tickets?: boolean | Prisma.Users$ticketsArgs<ExtArgs>
   _count?: boolean | Prisma.UsersCountOutputTypeDefaultArgs<ExtArgs>
@@ -489,6 +524,7 @@ export type UsersSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   email?: boolean
   password?: boolean
   role?: boolean
+  country?: boolean
 }, ExtArgs["result"]["users"]>
 
 export type UsersSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -496,6 +532,7 @@ export type UsersSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   email?: boolean
   password?: boolean
   role?: boolean
+  country?: boolean
 }, ExtArgs["result"]["users"]>
 
 export type UsersSelectScalar = {
@@ -503,9 +540,10 @@ export type UsersSelectScalar = {
   email?: boolean
   password?: boolean
   role?: boolean
+  country?: boolean
 }
 
-export type UsersOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "password" | "role", ExtArgs["result"]["users"]>
+export type UsersOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "password" | "role" | "country", ExtArgs["result"]["users"]>
 export type UsersInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   refreshTokens?: boolean | Prisma.Users$refreshTokensArgs<ExtArgs>
   tickets?: boolean | Prisma.Users$ticketsArgs<ExtArgs>
@@ -525,6 +563,7 @@ export type $UsersPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     email: string
     password: string
     role: $Enums.SenderType
+    country: string | null
   }, ExtArgs["result"]["users"]>
   composites: {}
 }
@@ -954,6 +993,7 @@ export interface UsersFieldRefs {
   readonly email: Prisma.FieldRef<"Users", 'String'>
   readonly password: Prisma.FieldRef<"Users", 'String'>
   readonly role: Prisma.FieldRef<"Users", 'SenderType'>
+  readonly country: Prisma.FieldRef<"Users", 'String'>
 }
     
 

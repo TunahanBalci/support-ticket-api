@@ -12,21 +12,25 @@
   "keywords": [],
   "main": "src/index.ts",
   "scripts": {
-    "start": "node --env-file=.env src/index.js",
-    "dev": "node --watch --env-file=.env src/index.js",
+    "start": "tsx src/index.ts",
+    "dev": "tsx watch src/index.ts",
     "lint": "eslint --config config/eslint.config.mjs --fix src",
     "test": "vitest run --config config/vitest.config.ts",
-    "test:integration": "vitest run --config config/vitest.config.integration.ts"
+    "test:integration": "vitest run --config config/vitest.config.integration.ts",
+    "test:e2e": "vitest run --config config/vitest.config.e2e.ts",
+    "worker": "tsx src/workers/index.ts"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.3.0",
     "@prisma/client": "^7.3.0",
     "@xenova/transformers": "^2.17.2",
     "bcryptjs": "^3.0.3",
+    "bullmq": "^5.67.3",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
     "helmet": "^8.1.0",
+    "ioredis": "^5.9.2",
     "jsonwebtoken": "^9.0.3",
     "morgan": "^1.10.1",
     "pg": "^8.18.0",

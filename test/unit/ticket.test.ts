@@ -1,8 +1,8 @@
 import request from "supertest";
 import { describe, expect, it } from "vitest";
-import app from "../src/app";
-import { generateTestToken } from "./helpers/auth-helper";
-import { prismaMock } from "./helpers/prisma-mock";
+import app from "../../src/app";
+import { generateTestToken } from "../helpers/auth-helper";
+import { prismaMock } from "../helpers/prisma-mock";
 
 describe("Ticket Routes", () => {
   const userPayload = { userId: "123e4567-e89b-12d3-a456-426614174000", role: "USER" };
@@ -11,7 +11,7 @@ describe("Ticket Routes", () => {
   const adminPayload = { userId: "987e6543-e21b-12d3-a456-426614174000", role: "SUPPORT_AGENT" };
   const adminToken = generateTestToken(adminPayload);
 
-  describe("POST /api/ticket/create", () => {
+  describe("POST /api/v1/ticket/create", () => {
     /*
     @description Creates a new ticket successfully
     @expected 201 Created
@@ -35,7 +35,7 @@ describe("Ticket Routes", () => {
       prismaMock.tickets.create.mockResolvedValue(createdTicket as any);
 
       const response = await request(app)
-        .post("/api/ticket/create")
+        .post("/api/v1/ticket/create")
         .set("Authorization", `Bearer ${userToken}`)
         .send(ticketData);
 
@@ -50,7 +50,7 @@ describe("Ticket Routes", () => {
     */
     it("should return 400 if validation fails", async () => {
       const response = await request(app)
-        .post("/api/ticket/create")
+        .post("/api/v1/ticket/create")
         .set("Authorization", `Bearer ${userToken}`)
         .send({ title: "No desc" });
 
@@ -58,7 +58,7 @@ describe("Ticket Routes", () => {
     });
   });
 
-  describe("GET /api/ticket/:id", () => {
+  describe("GET /api/v1/ticket/:id", () => {
     /*
     @description Returns ticket details if the user owns it
     @expected 200 OK
@@ -74,7 +74,7 @@ describe("Ticket Routes", () => {
       prismaMock.tickets.findFirst.mockResolvedValue(ticket as any);
 
       const response = await request(app)
-        .get("/api/ticket/123e4567-e89b-12d3-a456-426614174000")
+        .get("/api/v1/ticket/123e4567-e89b-12d3-a456-426614174000")
         .set("Authorization", `Bearer ${userToken}`);
 
       expect(response.status).toBe(200);
@@ -96,7 +96,7 @@ describe("Ticket Routes", () => {
       prismaMock.tickets.findFirst.mockResolvedValue(ticket as any);
 
       const response = await request(app)
-        .get("/api/ticket/123e4567-e89b-12d3-a456-426614174000-2")
+        .get("/api/v1/ticket/123e4567-e89b-12d3-a456-426614174000-2")
         .set("Authorization", `Bearer ${userToken}`);
 
       expect(response.status).toBe(403);
@@ -117,7 +117,7 @@ describe("Ticket Routes", () => {
       prismaMock.tickets.findFirst.mockResolvedValue(ticket as any);
 
       const response = await request(app)
-        .get("/api/ticket/123e4567-e89b-12d3-a456-426614174000-2")
+        .get("/api/v1/ticket/123e4567-e89b-12d3-a456-426614174000-2")
         .set("Authorization", `Bearer ${adminToken}`);
 
       expect(response.status).toBe(200);
@@ -138,7 +138,7 @@ describe("Ticket Routes", () => {
       prismaMock.tickets.findFirst.mockResolvedValue(ticket as any);
 
       const response = await request(app)
-        .get("/api/ticket/123e4567-e89b-12d3-a456-426614174000")
+        .get("/api/v1/ticket/123e4567-e89b-12d3-a456-426614174000")
         .set("Authorization", `Bearer ${userToken}`);
 
       expect(response.status).toBe(404);
@@ -152,14 +152,14 @@ describe("Ticket Routes", () => {
       prismaMock.tickets.findFirst.mockResolvedValue(null);
 
       const response = await request(app)
-        .get("/api/ticket/non-existent")
+        .get("/api/v1/ticket/non-existent")
         .set("Authorization", `Bearer ${userToken}`);
 
       expect(response.status).toBe(404);
     });
   });
 
-  describe("GET /api/ticket/:id (Permission Bug Check)", () => {
+  describe("GET /api/v1/ticket/:id (Permission Bug Check)", () => {
     /*
     @description Verify that a user can access their own active ticket (Regression Test)
     @expected 200 OK
@@ -175,14 +175,14 @@ describe("Ticket Routes", () => {
       prismaMock.tickets.findFirst.mockResolvedValue(ticket as any);
 
       const response = await request(app)
-        .get("/api/ticket/123e4567-e89b-12d3-a456-426614174000")
+        .get("/api/v1/ticket/123e4567-e89b-12d3-a456-426614174000")
         .set("Authorization", `Bearer ${userToken}`);
 
       expect(response.status).toBe(200);
     });
   });
 
-  describe("PUT /api/ticket/update", () => {
+  describe("PUT /api/v1/ticket/update", () => {
     /*
     @description Updates a ticket successfully
     @expected 200 OK
@@ -198,7 +198,7 @@ describe("Ticket Routes", () => {
       prismaMock.tickets.update.mockResolvedValue({ ...ticket, title: "Updated" } as any);
 
       const response = await request(app)
-        .put("/api/ticket/update")
+        .put("/api/v1/ticket/update")
         .set("Authorization", `Bearer ${userToken}`)
         .send({ id: "123e4567-e89b-12d3-a456-426614174000", title: "Updated" });
 
@@ -207,7 +207,7 @@ describe("Ticket Routes", () => {
     });
   });
 
-  describe("PUT /api/ticket/delete", () => {
+  describe("PUT /api/v1/ticket/delete", () => {
     /*
     @description Soft deletes a ticket
     @expected 200 OK
@@ -224,7 +224,7 @@ describe("Ticket Routes", () => {
       prismaMock.tickets.update.mockResolvedValue({ ...ticket, deletedAt: new Date() } as any);
 
       const response = await request(app)
-        .put("/api/ticket/delete")
+        .put("/api/v1/ticket/delete")
         .set("Authorization", `Bearer ${userToken}`)
         .send({ id: "123e4567-e89b-12d3-a456-426614174000" });
 
@@ -233,7 +233,7 @@ describe("Ticket Routes", () => {
     });
   });
 
-  describe("GET /api/ticket/user/:userId", () => {
+  describe("GET /api/v1/ticket/user/:userId", () => {
     /*
     @description Returns all tickets for a specific user
     @expected 200 OK
@@ -248,7 +248,7 @@ describe("Ticket Routes", () => {
       prismaMock.tickets.count.mockResolvedValue(2);
 
       const response = await request(app)
-        .get(`/api/ticket/user/${userPayload.userId}`)
+        .get(`/api/v1/ticket/user/${userPayload.userId}`)
         .set("Authorization", `Bearer ${userToken}`);
 
       expect(response.status).toBe(200);
@@ -258,7 +258,7 @@ describe("Ticket Routes", () => {
     });
   });
 
-  describe("GET /api/ticket/all", () => {
+  describe("GET /api/v1/ticket/all", () => {
     /*
     @description Returns all tickets for a support agent
     @expected 200 OK
@@ -272,7 +272,7 @@ describe("Ticket Routes", () => {
       prismaMock.tickets.count.mockResolvedValue(1);
 
       const response = await request(app)
-        .get("/api/ticket/all/")
+        .get("/api/v1/ticket/all/")
         .set("Authorization", `Bearer ${adminToken}`);
 
       expect(response.status).toBe(200);
@@ -285,7 +285,7 @@ describe("Ticket Routes", () => {
     */
     it("should return 403 for user role", async () => {
       const response = await request(app)
-        .get("/api/ticket/all/")
+        .get("/api/v1/ticket/all/")
         .set("Authorization", `Bearer ${userToken}`);
 
       expect(response.status).toBe(403);

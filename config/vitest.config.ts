@@ -21,6 +21,9 @@ export default defineConfig({
       PAGINATION_LIMIT_MESSAGE_ALL: "190",
       PAGINATION_LIMIT_TICKET_BY_USER: "190",
       PAGINATION_LIMIT_TICKET_ALL: "190",
+      SLACK_WEBHOOK_URL: "https://example.com/webhook",
+      REDIS_HOST: "localhost",
+      REDIS_PORT: "6379",
     },
   },
 });

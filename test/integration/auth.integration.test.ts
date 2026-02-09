@@ -4,7 +4,7 @@ import app from "../../src/app";
 import { prisma } from "../setup-integration";
 
 describe("Auth Integration Tests", () => {
-  describe("POST /api/auth/register", () => {
+  describe("POST /api/v1/auth/register", () => {
     /*
     @description Registers a new user and persists the record
     @expected 201 Created
@@ -16,7 +16,7 @@ describe("Auth Integration Tests", () => {
       };
 
       const response = await request(app)
-        .post("/api/auth/register")
+        .post("/api/v1/auth/register")
         .send(newUser);
 
       expect(response.status).toBe(201);
@@ -40,17 +40,17 @@ describe("Auth Integration Tests", () => {
         password: "Password123!",
       };
 
-      await request(app).post("/api/auth/register").send(user);
+      await request(app).post("/api/v1/auth/register").send(user);
 
       const response = await request(app)
-        .post("/api/auth/register")
+        .post("/api/v1/auth/register")
         .send(user);
 
       expect(response.status).toBe(400);
     });
   });
 
-  describe("POST /api/auth/login", () => {
+  describe("POST /api/v1/auth/login", () => {
     /*
     @description Logs in a user and issues tokens
     @expected 200 OK
@@ -61,10 +61,10 @@ describe("Auth Integration Tests", () => {
         password: "Password123!",
       };
 
-      await request(app).post("/api/auth/register").send(user);
+      await request(app).post("/api/v1/auth/register").send(user);
 
       const response = await request(app)
-        .post("/api/auth/login")
+        .post("/api/v1/auth/login")
         .send(user);
 
       expect(response.status).toBe(200);
@@ -86,10 +86,10 @@ describe("Auth Integration Tests", () => {
         password: "Password123!",
       };
 
-      await request(app).post("/api/auth/register").send(user);
+      await request(app).post("/api/v1/auth/register").send(user);
 
       const response = await request(app)
-        .post("/api/auth/login")
+        .post("/api/v1/auth/login")
         .send({ ...user, password: "WrongPassword" });
 
       expect(response.status).toBe(403);

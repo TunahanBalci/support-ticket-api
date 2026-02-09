@@ -4,12 +4,13 @@ import { addRefreshToken } from "../controllers/auth.controller";
 import { createUserByEmailAndPassword, findUserByEmail } from "../controllers/user.controller";
 import { validateEmail, validatePassword } from "../middlewares/validate.middlewares";
 import { generateTokens } from "../utils/jwt.utils";
+import { enrichUserLocation } from "../services/geo.service";
 
 const router = express.Router();
 
 /**
  * REGISTRATION 
- * POST /api/auth/register
+ * POST /api/v1/auth/register
  * 
  * request body: { email: string, password: string }
  *
@@ -31,6 +32,12 @@ router.post("/register", validateEmail, validatePassword, async (req, res, next)
     const { accessToken, refreshToken } = await generateTokens(user);
     await addRefreshToken(refreshToken, user.id as string);
 
+    // geolocation enrichment
+    const ipAddress = (req.headers["x-forwarded-for"] as string)?.split(",")[0] || req.socket.remoteAddress || "";
+    enrichUserLocation(user.id as string, ipAddress).catch((err) =>
+      console.error(`[GeoBackgroundError] Failed to enrich location for user ${user.id}:`, err)
+    );
+
     res.status(201).json({
       data: {
         accessToken,
@@ -48,7 +55,7 @@ router.post("/register", validateEmail, validatePassword, async (req, res, next)
 
 /**
  * LOGIN  
- * POST /api/auth/login
+ * POST /api/v1/auth/login
  * 
  * request body: { email: string, password: string }
  *
@@ -78,6 +85,12 @@ router.post("/login", async (req, res, next) => {
 
     const { accessToken, refreshToken } = await generateTokens(existingUser);
     await addRefreshToken(refreshToken, existingUser.id as string);
+
+    // geolocation enrichment
+    const ipAddress = (req.headers["x-forwarded-for"] as string)?.split(",")[0] || req.socket.remoteAddress || "";
+    enrichUserLocation(existingUser.id as string, ipAddress).catch((err) =>
+      console.error(`[GeoBackgroundError] Failed to enrich location for user ${existingUser.id}:`, err)
+    );
 
     res.status(200).json({
       data: {

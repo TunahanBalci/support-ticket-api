@@ -9,7 +9,7 @@ export async function createTestUser(emailPrefix: string, role: "USER" | "SUPPOR
   const email = `${baseName}_${Date.now()}_${Math.floor(Math.random() * 1000)}@example.com`;
   const password = "Password123!";
 
-  const res = await request(app).post("/api/auth/register").send({ email, password });
+  const res = await request(app).post("/api/v1/auth/register").send({ email, password });
 
   if (res.status !== 201) {
     throw new Error(`Failed to create test user: ${res.status} ${JSON.stringify(res.body)}`);
@@ -27,7 +27,7 @@ export async function createTestUser(emailPrefix: string, role: "USER" | "SUPPOR
     await prisma.users.update({ where: { id: user.id }, data: { role } });
     userId = user.id;
 
-    const loginRes = await request(app).post("/api/auth/login").send({ email, password });
+    const loginRes = await request(app).post("/api/v1/auth/login").send({ email, password });
     if (loginRes.status === 200) {
       token = loginRes.body.data.accessToken;
     }

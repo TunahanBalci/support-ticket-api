@@ -8,7 +8,7 @@ const router = express.Router();
 
 /**
  * SEMANTIC SEARCH
- * GET /api/search?query=<search_text>&limit=<number>
+ * GET /api/v1/search?query=<search_text>&limit=<number>
  *
  * Searches both tickets and messages using semantic similarity.
  * Returns results ranked by cosine similarity to the query.

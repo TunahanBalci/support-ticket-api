@@ -1,9 +1,9 @@
 import type { NextFunction, Request, Response } from "express";
 import express from "express";
-import { deleteTicket, findAllTicketsByUser, findAllTicketsSorted, findTicketById, updateTicket } from "../controllers/ticket.controller";
+import { createTicket, deleteTicket, findAllTicketsByUser, findAllTicketsSorted, findTicketById, updateTicket } from "../controllers/ticket.controller";
 import { isAuthenticated } from "../middlewares/auth.middlewares";
 import { validatePagination, validateUserId } from "../middlewares/validate.middlewares";
-import { generateEmbedding } from "../utils/embedding.utils";
+import { indexTicket } from "../services/semantic.service";
 import { canAccessTicket, canViewAllTickets, canViewUserTickets } from "../utils/permissions.utils";
 import { prisma } from "../utils/prisma.utils";
 
@@ -11,7 +11,7 @@ const router = express.Router();
 
 /**
  * LIST TICKETS BY USER ID
- * GET /api/tickets/user/:userId?orderBy=asc&orderType=createdAt&page=1&limit=10
+ * GET /api/v1/tickets/user/:userId?orderBy=asc&orderType=createdAt&page=1&limit=10
  * 
  * Lists all tickets for a specific user with sorting and pagination
  * 
@@ -55,7 +55,7 @@ router.get("/user/:userId", isAuthenticated, validateUserId, validatePagination,
 
 /**
  * GET ALL TICKETS 
- * GET /api/tickets/all?orderBy=asc&orderType=createdAt&page=1&limit=10
+ * GET /api/v1/tickets/all?orderBy=asc&orderType=createdAt&page=1&limit=10
  * 
  * Lists all tickets with sorting and pagination
  * 
@@ -98,7 +98,7 @@ router.get("/all/", isAuthenticated, validatePagination, async (req: Request, re
 
 /**
  * FIND TICKET BY ID
- * GET /api/tickets/:id
+ * GET /api/v1/tickets/:id
  * 
  * Finds a ticket by its ID
  * 
@@ -133,7 +133,7 @@ router.get("/:id", isAuthenticated, async (req: Request, res: Response, next: Ne
 
 /**
  * CREATE TICKET
- * POST /api/tickets/create
+ * POST /api/v1/tickets/create
  * 
  * request body = { title: string, description: string, status?: string }
  * 
@@ -153,25 +153,10 @@ router.post("/create", isAuthenticated, async (req: Request, res: Response, next
       return next(new Error("Description is required"));
     }
 
-    const ticket = await prisma.tickets.create({
-      data: {
-        title,
-        description,
-        status,
-        userId,
-      },
-    });
+    const ticket = await createTicket(userId, title, description, status);
 
     // generate embedding
-    const textForEmbedding = `Title: ${title}. Content: ${description}`;
-    const embedding = await generateEmbedding(textForEmbedding);
-
-    const vectorString = `[${embedding.join(",")}]`;
-    await prisma.$executeRaw`
-      UPDATE "Tickets" 
-      SET embedding = ${vectorString}::vector 
-      WHERE id = ${ticket.id}
-    `;
+    await indexTicket(ticket.id, title, description);
 
     res.status(201).json({ data: ticket, message: "Ticket created successfully" });
   }
@@ -183,7 +168,7 @@ router.post("/create", isAuthenticated, async (req: Request, res: Response, next
 
 /**
  * UPDATE TICKET 
- * PUT /api/tickets/update
+ * PUT /api/v1/tickets/update
  * 
  * request body = { id: string, title?: string, description?: string, status?: string }
  * 
@@ -220,7 +205,7 @@ router.put("/update", isAuthenticated, async (req: Request, res: Response, next:
 
 /**
  * DELETE TICKET 
- * PUT /api/tickets/delete
+ * PUT /api/v1/tickets/delete
  * 
  * request body = { id: string }
  * 

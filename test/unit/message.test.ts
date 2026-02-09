@@ -1,8 +1,8 @@
 import request from "supertest";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import app from "../src/app";
-import { generateTestToken } from "./helpers/auth-helper";
-import { prismaMock } from "./helpers/prisma-mock";
+import app from "../../src/app";
+import { generateTestToken } from "../helpers/auth-helper";
+import { prismaMock } from "../helpers/prisma-mock";
 
 describe("Message Routes", () => {
   const userPayload = { userId: "user-123", role: "USER" };
@@ -10,7 +10,7 @@ describe("Message Routes", () => {
   const supportPayload = { userId: "support-123", role: "SUPPORT_AGENT" };
   const supportToken = generateTestToken(supportPayload);
 
-  describe("POST /api/message/create", () => {
+  describe("POST /api/v1/message/create", () => {
     /*
     @description Creates a message linked to a ticket successfully
     @expected 201 Created
@@ -40,7 +40,7 @@ describe("Message Routes", () => {
       prismaMock.messages.create.mockResolvedValue(createdMessage as any);
 
       const response = await request(app)
-        .post("/api/message/create")
+        .post("/api/v1/message/create")
         .set("Authorization", `Bearer ${userToken}`)
         .send(messageData);
 
@@ -68,7 +68,7 @@ describe("Message Routes", () => {
       prismaMock.tickets.findFirst.mockResolvedValue(ticket as any);
 
       const response = await request(app)
-        .post("/api/message/create")
+        .post("/api/v1/message/create")
         .set("Authorization", `Bearer ${userToken}`)
         .send(messageData);
 
@@ -83,7 +83,7 @@ describe("Message Routes", () => {
       prismaMock.tickets.findFirst.mockResolvedValue(null);
 
       const response = await request(app)
-        .post("/api/message/create")
+        .post("/api/v1/message/create")
         .set("Authorization", `Bearer ${userToken}`)
         .send({ content: "Hi", ticketId: "non-existent" });
 
@@ -91,7 +91,7 @@ describe("Message Routes", () => {
     });
   });
 
-  describe("GET /api/message/ticket/:ticketId", () => {
+  describe("GET /api/v1/message/ticket/:ticketId", () => {
     /*
     @description Retrieves all messages for a specific ticket
     @expected 200 OK
@@ -114,7 +114,7 @@ describe("Message Routes", () => {
       prismaMock.messages.count.mockResolvedValue(2);
 
       const response = await request(app)
-        .get("/api/message/ticket/123e4567-e89b-12d3-a456-426614174000")
+        .get("/api/v1/message/ticket/123e4567-e89b-12d3-a456-426614174000")
         .set("Authorization", `Bearer ${userToken}`);
 
       expect(response.status).toBe(200);
@@ -122,7 +122,7 @@ describe("Message Routes", () => {
     });
   });
 
-  describe("GET /api/message/all", () => {
+  describe("GET /api/v1/message/all", () => {
     /*
     @description Retrieves all messages for a support agent
     @expected 200 OK
@@ -136,7 +136,7 @@ describe("Message Routes", () => {
       prismaMock.messages.count.mockResolvedValue(1);
 
       const response = await request(app)
-        .get("/api/message/all/")
+        .get("/api/v1/message/all/")
         .set("Authorization", `Bearer ${supportToken}`);
 
       expect(response.status).toBe(200);

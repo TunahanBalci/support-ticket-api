@@ -1,11 +1,11 @@
 import bcrypt from "bcryptjs";
 import request from "supertest";
 import { describe, expect, it } from "vitest";
-import app from "../src/app";
-import { prismaMock } from "./helpers/prisma-mock";
+import app from "../../src/app";
+import { prismaMock } from "../helpers/prisma-mock";
 
 describe("Auth Routes", () => {
-  describe("POST /api/auth/register", () => {
+  describe("POST /api/v1/auth/register", () => {
     /*
     @description Registers a new user successfully
     @expected 201 Created
@@ -31,7 +31,7 @@ describe("Auth Routes", () => {
       prismaMock.refreshTokens.create.mockResolvedValue({} as any);
 
       const response = await request(app)
-        .post("/api/auth/register")
+        .post("/api/v1/auth/register")
         .send(newUser);
 
       expect(response.status).toBe(201);
@@ -54,7 +54,7 @@ describe("Auth Routes", () => {
       prismaMock.users.findFirst.mockResolvedValue({ id: "existing-id", email: existingUser.email } as any);
 
       const response = await request(app)
-        .post("/api/auth/register")
+        .post("/api/v1/auth/register")
         .send(existingUser);
 
       expect(response.status).toBe(400);
@@ -72,14 +72,14 @@ describe("Auth Routes", () => {
       };
 
       const response = await request(app)
-        .post("/api/auth/register")
+        .post("/api/v1/auth/register")
         .send(invalidUser);
 
       expect(response.status).toBe(400);
     });
   });
 
-  describe("POST /api/auth/login", () => {
+  describe("POST /api/v1/auth/login", () => {
     /*
     @description Logs in a user successfully with valid credentials
     @expected 200 OK
@@ -103,7 +103,7 @@ describe("Auth Routes", () => {
       prismaMock.refreshTokens.create.mockResolvedValue({} as any);
 
       const response = await request(app)
-        .post("/api/auth/login")
+        .post("/api/v1/auth/login")
         .send(loginData);
 
       expect(response.status).toBe(200);
@@ -131,7 +131,7 @@ describe("Auth Routes", () => {
       prismaMock.users.findFirst.mockResolvedValue(user as any);
 
       const response = await request(app)
-        .post("/api/auth/login")
+        .post("/api/v1/auth/login")
         .send(loginData);
 
       expect(response.status).toBe(403);
@@ -150,7 +150,7 @@ describe("Auth Routes", () => {
       prismaMock.users.findFirst.mockResolvedValue(null);
 
       const response = await request(app)
-        .post("/api/auth/login")
+        .post("/api/v1/auth/login")
         .send(loginData);
 
       expect(response.status).toBe(403);
