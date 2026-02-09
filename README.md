@@ -27,91 +27,124 @@ A robust, scalable REST API for managing support tickets, featuring asynchronous
 
 ## Prerequisites
 
-- **Node.js** (v20+ recommended)
-- **npm** (or pnpm/yarn)
-- **PostgreSQL** (with `vector` extension enabled)
-- **Redis Server** (required for background queues)
+- **Docker** (v20.10+)
+- **Docker Compose** (v2.0+)
 
 ## Setup & Installation
 
-1.  **Clone the repository**
-    ```bash
-    git clone https://github.com/w3cj/support-ticket-api.git
-    cd support-ticket-api
-    ```
+### 1. Clone the Repository
+```bash
+git clone https://github.com/w3cj/support-ticket-api.git
+cd support-ticket-api
+```
 
-2.  **Install dependencies**
-    ```bash
-    npm install
-    ```
+### 2. Environment Configuration
+Create a `.env` file in the root directory with your configuration:
 
-3.  **Environment Configuration**
-    Create a `.env` file in the root directory. <br>Use the example below. Change the values with your own environment variable values:
+```ini
+# App Settings
+APP_HOST=0.0.0.0
+APP_PORT=8000
 
-    ```ini
-    # App Settings
-    NODE_ENV=development
-    APP_HOST=0.0.0.0
-    APP_PORT=8000
+# Database Configuration (PostgreSQL)
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+POSTGRES_DB=support_tickets
+DATABASE_URL="postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}?schema=public&sslmode=disable"
 
-    # Database Configuration
-    DATABASE_URL="postgres://user:password@localhost:5432/support_tickets?schema=public"
+# Authentication Settings
+AUTH_SECRET="your_super_secret_jwt_key"
+AUTH_ACCESS_TOKEN_EXPIRES_IN="15m"
+AUTH_REFRESH_TOKEN_EXPIRES_IN="24h"
 
-    # Authentication Settings
-    AUTH_SECRET="your_super_secret_jwt_key" 
-    AUTH_ACCESS_TOKEN_EXPIRES_IN="15m"              
-    AUTH_REFRESH_TOKEN_EXPIRES_IN="24h"    
+# Pagination Settings
+PAGINATION_LIMIT_MESSAGE_BY_TICKET=50
+PAGINATION_LIMIT_MESSAGE_ALL=50
+PAGINATION_LIMIT_TICKET_BY_USER=50
+PAGINATION_LIMIT_TICKET_ALL=50
 
-    # Pagination Settings
-    PAGINATION_LIMIT_MESSAGE_BY_TICKET=50
-    PAGINATION_LIMIT_MESSAGE_ALL=50
-    PAGINATION_LIMIT_TICKET_BY_USER=50
-    PAGINATION_LIMIT_TICKET_ALL=50
+# Slack Webhook (optional - for ticket notifications)
+SLACK_WEBHOOK_URL="https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
 
-    # Slack Webhook
-    SLACK_WEBHOOK_URL="https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
+# Redis Configuration
+REDIS_HOST=redis
+REDIS_PORT=6379
+REDIS_PASSWORD=""
+```
 
-    # Redis Configuration
-    REDIS_HOST="127.0.0.1"
-    REDIS_PORT="6379"
-    REDIS_PASSWORD=""
-    ```
+> **Important**: Change the `AUTH_SECRET` to a strong, random value for production use.
 
-4.  **Database Setup**
-    Ensure your PostgreSQL database is running and verify that the `vector` extension is installed.
-    ```sql
-    CREATE EXTENSION IF NOT EXISTS vector;
-    ```
-    
-    Then run Prisma migrations to set up the schema:
-    ```bash
-    npx prisma migrate dev
-    ```
-    
-    *Alternatively, if you want to push the schema without creating a migration file (e.g., for rapid prototyping):*
-    ```bash
-    npx prisma db push
-    ```
+### 3. Start the Application
+Launch all services (API, Worker, Database, Redis) with a single command:
 
-5.  **Start Redis**
-    Make sure your Redis server is running on the configured host and port.
+```bash
+docker compose up --build
+```
 
 ## Running the Application
 
-### Development Mode
-Starts the API server and the Worker process in development mode (with hot reloading).
+### Production Mode (Docker)
 ```bash
+# Start all services:
+docker compose up -d
+
+# Stopp all services:
+docker compose down
+
+# View logs
+docker compose logs -f api worker
+
+# Rebuild after code changes:
+docker compose up --build -d
+```
+
+### Development Mode (Local)
+For local development without Docker:
+
+**Prerequisites:**
+- Node.js v20+
+- PostgreSQL with pgvector extension
+- Redis server
+
+```bash
+# Install dependencies
+npm install
+
+# Run migrations
+npx prisma migrate dev
+
+# Start API (process 1)
 npm run dev
 
-# run in a seperate terminal (as a seperate process):
+# Start Worker (process 2)
 npm run worker
 ```
 
-### Production Mode
+## Container Management
+
+### Accessing Container Shells
 ```bash
-npm start
-# And in a separate process/container:
-npm run worker
+# API container
+docker compose exec api sh
+
+# Worker container
+docker compose exec worker sh
+
+# Database container
+docker compose exec <db_name> psql -U <db_user_name> -d <table_name>
+```
+
+### Viewing Service Logs
+```bash
+# All services
+docker compose logs
+
+# Specific service
+docker compose logs api
+docker compose logs worker
+
+# Follow logs in real-time
+docker compose logs -f
 ```
 
 ## Testing
@@ -138,13 +171,3 @@ Start the application and visit:
 -   **Messages**: `/api/v1/message/create`, `/api/v1/message/ticket/{ticketId}`
 -   **Search**: `/api/v1/search?query=...` (Semantic Search)
 
-## Integrations
-
-### Slack Notifications
-When a new ticket is created, a job is added to the `slack-notifications` queue. The worker processes this job and sends a formatted message to the configured `SLACK_WEBHOOK_URL`.
-
-### IP Geolocation
-When a user logs in or registers, their IP address is asynchronously processed to determine their country of origin. This data is added to their user profile for better support context. This process fails silently if the IP cannot be resolved, ensuring the user experience is not interrupted.
-
-### Semantic Search
-Messages and Tickets are automatically embedded using a local Transformer model when created. These embeddings are stored in Postgres (`pgvector`). The `/search` endpoint allows you to find relevant content based on meaning, not just keyword matching.
