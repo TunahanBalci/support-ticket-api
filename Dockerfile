@@ -22,7 +22,9 @@ WORKDIR /app
 
 COPY package*.json ./
 COPY --from=builder /app/src/data/schema.prisma ./src/data/schema.prisma
-RUN npm install && \
+
+RUN apt-get update -y && apt-get install -y openssl && \
+    npm install && \
     npx prisma generate --schema=./src/data/schema.prisma && \
     npm cache clean --force
 
