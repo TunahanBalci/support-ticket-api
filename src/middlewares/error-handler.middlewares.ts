@@ -25,9 +25,12 @@ if mode = production
 function errorHandler(err: Error, req: Request, res: Response, _next: NextFunction) {
   const statusCode = res.statusCode !== 200 ? res.statusCode : 500;
   res.status(statusCode);
+  if (env.NODE_ENV === "production") {
+    return res.json({ message: err.message });
+  }
   res.json({
     message: err.message,
-    stack: env.NODE_ENV === "production" ? "🥞" : err.stack,
+    stack: err.stack,
   });
 }
 

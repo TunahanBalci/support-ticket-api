@@ -10,7 +10,22 @@ import { errorHandler, notFound } from "./middlewares/error-handler.middlewares"
 const app = express();
 
 app.use(morgan("dev"));
-app.use(helmet());
+app.use((req, res, next) => {
+  if (req.originalUrl.startsWith("/api/v1/api-docs")) {
+    helmet({
+      contentSecurityPolicy: {
+        directives: {
+          ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+          "script-src": ["'self'", "'unsafe-inline'"],
+          "style-src": ["'self'", "'unsafe-inline'"],
+          "img-src": ["'self'", "data:", "blob:"],
+        },
+      },
+    })(req, res, next);
+  } else {
+    helmet()(req, res, next);
+  }
+});
 app.use(cors());
 app.use(express.json());
 
