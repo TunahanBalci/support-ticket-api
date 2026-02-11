@@ -4,8 +4,8 @@ import helmet from "helmet";
 
 import morgan from "morgan";
 
-import api from "./api/v1/index.js";
-import { errorHandler, notFound } from "./middlewares/error-handler.middlewares";
+import api from './api/v1/index.js';
+import { errorHandler, notFound } from './middlewares/error-handler.middlewares.js';
 
 const app = express();
 

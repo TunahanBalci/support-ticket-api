@@ -4,12 +4,12 @@ import "dotenv/config";
 import path from "node:path";
 import { defineConfig } from "prisma/config";
 
-const rootDir = path.resolve(import.meta.dirname, "..");
+const rootDir = path.resolve(import.meta.dirname);
 
 export default defineConfig({
-  schema: path.join(rootDir, "src/data/schema.prisma"),
-  migrations: {
-    path: path.join(rootDir, "src/data/migrations"),
+  schema: path.join(rootDir, "./src/data/schema.prisma"),
+  migrations:   {
+    path: path.join(rootDir, "./src/data/migrations"),
   },
   datasource: {
     url: process.env["DATABASE_URL"],

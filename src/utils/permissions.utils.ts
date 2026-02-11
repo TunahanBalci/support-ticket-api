@@ -1,4 +1,4 @@
-import type { Tickets } from "../generated/prisma/client";
+import type { Tickets } from '../generated/prisma/client.js';
 
 /**
  * @param userId - string

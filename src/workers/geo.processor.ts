@@ -1,6 +1,6 @@
 
 import type { Job } from "bullmq";
-import { prisma } from "../utils/prisma.utils";
+import { prisma } from '../utils/prisma.utils.js';
 
 export interface GeoJobData {
   userId: string;

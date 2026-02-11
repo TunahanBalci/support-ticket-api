@@ -1,10 +1,10 @@
 
 import "dotenv/config";
 import { Worker } from "bullmq";
-import { redisOptions } from "../config/queue";
-import { slackJobProcessor } from "./slack.processor";
-import { geoJobProcessor } from "./geo.processor";
-import { semanticJobProcessor } from "./semantic.processor";
+import { redisOptions } from '../config/queue.js';
+import { slackJobProcessor } from './slack.processor.js';
+import { geoJobProcessor } from './geo.processor.js';
+import { semanticJobProcessor } from './semantic.processor.js';
 
 // Slack Notification Worker
 const slackWorker = new Worker(

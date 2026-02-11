@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import { env } from "../utils/env.utils.js";
+import { env } from '../utils/env.utils.js';
 
 /*
 @param req - Express request object

@@ -1,40 +1,46 @@
 # build stage
-FROM node:20 AS builder
+FROM node:20-slim AS builder
 
 WORKDIR /app
 
 COPY package*.json ./
-COPY src/data/schema.prisma ./src/data/
+COPY prisma.config.ts ./
+COPY src/data/ ./src/data/
 COPY config ./config/
+COPY tsconfig.json ./
 
-RUN npm install
-
-RUN npx prisma generate --schema=./src/data/schema.prisma
+RUN npm install 
+RUN npx prisma generate
 
 COPY . .
 
 RUN npm run build
 
 # production stage
-FROM node:20 AS production
+FROM node:20-slim AS production
 
 WORKDIR /app
 
-COPY package*.json ./
-COPY --from=builder /app/src/data/schema.prisma ./src/data/schema.prisma
-
-RUN apt-get update -y && apt-get install -y openssl && \
-    npm install && \
-    npx prisma generate --schema=./src/data/schema.prisma && \
-    npm cache clean --force
-
-ENV NODE_ENV=production
-
 # copy built directories from build stage
+COPY --from=builder /app/package*.json ./
+COPY --from=builder /app/prisma.config.ts ./prisma.config.ts
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/src ./src
 COPY --from=builder /app/config ./config
 COPY --from=builder /app/src/config/swagger.json ./dist/config/swagger.json
 
+RUN apt-get update -y && apt-get install -y openssl netcat-openbsd && \
+    npm install && \
+    npx prisma generate && \
+    npm cache clean --force
+
+ENV NODE_ENV=production
+
+COPY start.sh .
+RUN chmod +x start.sh
+
 EXPOSE 8000
+ENTRYPOINT ["./start.sh"]
+
+
 CMD ["npm", "start"]

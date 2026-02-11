@@ -1,8 +1,8 @@
 import type { NextFunction, Request, Response } from "express";
 import express from "express";
-import { searchMessages, searchTickets } from "../controllers/search.controller";
-import { isAuthenticated } from "../middlewares/auth.middlewares";
-import { generateEmbedding } from "../utils/embedding.utils";
+import { searchMessages, searchTickets } from '../controllers/search.controller.js';
+import { isAuthenticated } from '../middlewares/auth.middlewares.js';
+import { generateEmbedding } from '../utils/embedding.utils.js';
 
 const router = express.Router();
 

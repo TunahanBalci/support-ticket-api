@@ -1,5 +1,5 @@
 
-import { semanticSearchQueue } from "../config/queue";
+import { semanticSearchQueue } from '../config/queue.js';
 
 /**
  * @param ticketId - The ID of the ticket to index

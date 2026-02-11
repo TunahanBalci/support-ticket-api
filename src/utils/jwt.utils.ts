@@ -1,6 +1,6 @@
 import crypto from "node:crypto";
 import jwt from "jsonwebtoken";
-import { env } from "./env.utils";
+import { env } from './env.utils.js';
 
 /**
  * generateAccessToken - Generates a JWT access token for a user with their ID and role, signed with a secret key and an expiration time.

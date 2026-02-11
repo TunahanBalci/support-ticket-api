@@ -1,9 +1,9 @@
 
 import { Queue } from "bullmq";
 import type { RedisOptions } from "ioredis";
-import Redis from "ioredis";
+import { Redis } from "ioredis";
 
-import { env } from "../utils/env.utils";
+import { env } from '../utils/env.utils.js';
 
 export const redisOptions: RedisOptions = {
   host: env.REDIS_HOST,

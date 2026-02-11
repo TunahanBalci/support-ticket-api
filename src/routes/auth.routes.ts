@@ -1,10 +1,10 @@
 import bcrypt from "bcryptjs";
 import express from "express";
-import { addRefreshToken } from "../controllers/auth.controller";
-import { createUserByEmailAndPassword, findUserByEmail } from "../controllers/user.controller";
-import { validateEmail, validatePassword } from "../middlewares/validate.middlewares";
-import { generateTokens } from "../utils/jwt.utils";
-import { enrichUserLocation } from "../services/geo.service";
+import { addRefreshToken } from '../controllers/auth.controller.js';
+import { createUserByEmailAndPassword, findUserByEmail } from '../controllers/user.controller.js';
+import { validateEmail, validatePassword } from '../middlewares/validate.middlewares.js';
+import { generateTokens } from '../utils/jwt.utils.js';
+import { enrichUserLocation } from '../services/geo.service.js';
 
 const router = express.Router();
 

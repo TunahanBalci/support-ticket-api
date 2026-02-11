@@ -23,7 +23,6 @@ services:
     depends_on:
       - db
       - redis
-    command: sh -c "npx prisma migrate deploy --config=./config/prisma.config.ts && npx tsx src/index.ts"
     networks:
       - app-network
 

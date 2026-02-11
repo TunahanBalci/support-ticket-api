@@ -1,9 +1,9 @@
-import type { Status } from "../generated/prisma/browser";
-import type { Tickets } from "../generated/prisma/client";
-import { slackNotificationQueue } from "../config/queue";
-import { env } from "../utils/env.utils";
-import { buildPagination } from "../utils/pagination.utils";
-import { prisma } from "../utils/prisma.utils";
+import type { Status } from '../generated/prisma/browser.js';
+import type { Tickets } from '../generated/prisma/client.js';
+import { slackNotificationQueue } from '../config/queue.js';
+import { env } from '../utils/env.utils.js';
+import { buildPagination } from '../utils/pagination.utils.js';
+import { prisma } from '../utils/prisma.utils.js';
 
 /**
  * @param _userId - string

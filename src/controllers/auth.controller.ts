@@ -1,5 +1,5 @@
-import { hashToken } from "../utils/hash-token.utils";
-import { prisma } from "../utils/prisma.utils";
+import { hashToken } from '../utils/hash-token.utils.js';
+import { prisma } from '../utils/prisma.utils.js';
 
 /*
 @param refreshToken: The refresh token to be added to the database

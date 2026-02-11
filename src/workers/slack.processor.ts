@@ -1,6 +1,6 @@
 
 import type { Job } from "bullmq";
-import { env } from "../utils/env.utils";
+import { env } from '../utils/env.utils.js';
 
 const SLACK_WEBHOOK_URL = env.SLACK_WEBHOOK_URL;
 

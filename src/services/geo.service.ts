@@ -1,5 +1,5 @@
 
-import { userEnrichmentQueue } from "../config/queue";
+import { userEnrichmentQueue } from '../config/queue.js';
 
 /** 
  * @param userId - The ID of the user to enrich.

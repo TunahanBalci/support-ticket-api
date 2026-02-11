@@ -1,7 +1,7 @@
 
 import type { Job } from "bullmq";
-import { prisma } from "../utils/prisma.utils";
-import { generateEmbedding } from "../utils/embedding.utils";
+import { prisma } from '../utils/prisma.utils.js';
+import { generateEmbedding } from '../utils/embedding.utils.js';
 
 export interface SemanticJobData {
   entityType: "ticket" | "message";

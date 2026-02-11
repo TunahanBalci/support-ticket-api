@@ -1,5 +1,5 @@
 import { hash } from "bcryptjs";
-import { prisma } from "../utils/prisma.utils";
+import { prisma } from '../utils/prisma.utils.js';
 
 /**
  * @param email: User's email

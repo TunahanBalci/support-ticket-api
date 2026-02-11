@@ -8,8 +8,8 @@
  *
  * 🟢 You can import this file directly.
  */
-export type * from './models/Users'
-export type * from './models/Tickets'
-export type * from './models/Messages'
-export type * from './models/RefreshTokens'
-export type * from './commonInputTypes'
+export type * from './models/Users.js'
+export type * from './models/Tickets.js'
+export type * from './models/Messages.js'
+export type * from './models/RefreshTokens.js'
+export type * from './commonInputTypes.js'

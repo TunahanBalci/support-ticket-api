@@ -1,7 +1,7 @@
-import type { SenderType } from "../generated/prisma/enums";
-import { env } from "../utils/env.utils";
-import { buildPagination } from "../utils/pagination.utils";
-import { prisma } from "../utils/prisma.utils";
+import type { SenderType } from '../generated/prisma/enums.js';
+import { env } from '../utils/env.utils.js';
+import { buildPagination } from '../utils/pagination.utils.js';
+import { prisma } from '../utils/prisma.utils.js';
 
 /**
  * @param pagination? - { page: number; limit: number, orderBy: "asc" | "desc", orderType: "updatedAt" | "createdAt" }

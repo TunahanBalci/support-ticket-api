@@ -1,11 +1,11 @@
 import type { NextFunction, Request, Response } from "express";
 import express from "express";
-import { createMessage, findAllMessagesByTicketId, findAllMessagesSorted } from "../controllers/message.contoller";
-import { isAuthenticated } from "../middlewares/auth.middlewares";
-import { validatePagination, validateTicketId } from "../middlewares/validate.middlewares";
-import { canAccessMessage, canAccessTicket, canViewAllMessages } from "../utils/permissions.utils";
-import { indexMessage } from "../services/semantic.service";
-import { prisma } from "../utils/prisma.utils";
+import { createMessage, findAllMessagesByTicketId, findAllMessagesSorted } from '../controllers/message.contoller.js';
+import { isAuthenticated } from '../middlewares/auth.middlewares.js';
+import { validatePagination, validateTicketId } from '../middlewares/validate.middlewares.js';
+import { canAccessMessage, canAccessTicket, canViewAllMessages } from '../utils/permissions.utils.js';
+import { indexMessage } from '../services/semantic.service.js';
+import { prisma } from '../utils/prisma.utils.js';
 
 const router = express.Router();
 

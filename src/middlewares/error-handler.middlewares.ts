@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
-import { env } from "../utils/env.utils.js";
+import { env } from '../utils/env.utils.js';
 
 /*
 @param req - Express request object
