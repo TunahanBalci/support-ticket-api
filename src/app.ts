@@ -13,14 +13,8 @@ app.use(morgan("dev"));
 app.use((req, res, next) => {
   if (req.originalUrl.startsWith("/api/v1/api-docs")) {
     helmet({
-      contentSecurityPolicy: {
-        directives: {
-          ...helmet.contentSecurityPolicy.getDefaultDirectives(),
-          "script-src": ["'self'", "'unsafe-inline'"],
-          "style-src": ["'self'", "'unsafe-inline'"],
-          "img-src": ["'self'", "data:", "blob:"],
-        },
-      },
+      contentSecurityPolicy: false,
+      crossOriginEmbedderPolicy: false,
     })(req, res, next);
   } else {
     helmet()(req, res, next);

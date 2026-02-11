@@ -7,8 +7,8 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3000/api/v1/",
-      "description": "Local Development Server"
+      "url": "http://164.90.237.71:8000/api/v1/",
+      "description": "Support Ticket API"
     }
   ],
   "components": {
@@ -419,7 +419,7 @@
     },
     "/ticket/all": {
       "get": {
-        "summary": "Get all tickets (Admin/Support Agent only)",
+        "summary": "Get all tickets (Support Agent only)",
         "tags": ["Ticket"],
         "security": [
           {
@@ -614,7 +614,7 @@
     },
     "/message/all": {
       "get": {
-        "summary": "Get all messages",
+        "summary": "Get all messages (Support Agent only)",
         "tags": ["Message"],
         "security": [
           {
