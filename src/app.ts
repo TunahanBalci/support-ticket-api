@@ -12,10 +12,7 @@ const app = express();
 app.use(morgan("dev"));
 app.use((req, res, next) => {
   if (req.originalUrl.startsWith("/api/v1/api-docs")) {
-    helmet({
-      contentSecurityPolicy: false,
-      crossOriginEmbedderPolicy: false,
-    })(req, res, next);
+    next();
   } else {
     helmet()(req, res, next);
   }
